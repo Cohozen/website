@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 export const Layout = styled.div`
   position: relative;
   margin-left: 20px;
-
   ${({ more }) =>
           more &&
           css`

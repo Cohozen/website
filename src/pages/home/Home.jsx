@@ -41,7 +41,7 @@ const Home = () => {
         <Links/>
         <Skills/>
 
-        {import.meta.env.DEV || (import.meta.env.PROD && import.meta.env.VITE_URL_LIVETRACK) ?
+        {(import.meta.env.DEV || (import.meta.env.PROD && import.meta.env.VITE_URL_LIVETRACK)) ?
             <Pulsating visible={true} color={colors.third} height={32} width={132}>
                 <Link to="/liveTrack">
                     <Button>LiveTrack</Button>

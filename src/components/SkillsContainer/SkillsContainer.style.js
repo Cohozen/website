@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import { colors } from "../../main.style.js";
 
 export const SkillsContainer = styled.div`
   font-size: 48px;
-  margin-top: 42px;
-  color: #546e7a;
+  margin-top: 50px;
+  color: ${colors.secondary};
   text-align: center;
   margin-left: -20px;
   display: flex;
@@ -11,7 +12,6 @@ export const SkillsContainer = styled.div`
   justify-content: center;
   z-index: 2;
 
-  @media (max-width: 768px) {
-    padding: 0 16px;
+  @media (max-width: 1024px) {
   }
 `;

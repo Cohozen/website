@@ -23,6 +23,10 @@ export const Name = styled.p`
   text-align: center;
   position: relative;
   z-index: 2;
+  @media (max-width: 1024px) {
+    font-size: 58px;
+    line-height: 72px;
+  }
 `;
 
 export const BackgroundAnimation = keyframes`
@@ -58,6 +62,10 @@ export const BackgroundShadow = styled.div`
   z-index: 0;
   background: ${colors.primary};
   transform: translate(-50%, -50%);
+  @media (max-width: 1024px) {
+    height: 150px;
+    width: 150px;
+  }
 `;
 
 export const Moon = styled.div`
@@ -69,6 +77,10 @@ export const Moon = styled.div`
   font-size: 45px;
   color: ${colors.text};
   opacity: 1;
+  @media (max-width: 1024px) {
+    top: 20%;
+    left: 10%;
+  }
 `;
 
 export const Line = styled.div`
@@ -86,6 +98,10 @@ export const Subtitle = styled.p`
   color: ${colors.text};
   position: relative;
   z-index: 2;
+  @media (max-width: 1024px) {
+    font-size: 24px;
+    margin: 0 0 24px 0;
+  }
 `;
 
 export const MeteorAnimation = keyframes`
