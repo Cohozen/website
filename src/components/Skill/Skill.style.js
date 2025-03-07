@@ -1,16 +1,20 @@
 import styled, { css } from 'styled-components';
 
 export const Layout = styled.div`
-  position: relative;
-  margin-left: 20px;
-  ${({ more }) =>
-          more &&
-          css`
-            font-size: 52px;
-            display: flex;
-            align-items: center;
-            margin-left: 20px;
-          `}
+    position: relative;
+    margin-left: 20px;
+    font-size: 52px;
+    @media (max-width: 1024px) {
+        font-size: 32px;
+    }
+    ${({more}) =>
+            more &&
+            css`
+                font-size: 52px;
+                display: flex;
+                align-items: center;
+                margin-left: 20px;
+            `}
 `;
 
 export const Popper = styled.div`

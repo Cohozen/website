@@ -21,7 +21,7 @@ const animation = keyframes`
 
 export const Link = styled.a`
   color: ${colors.text};
-  font-size: 24px;
+  font-size: 28px;
   transition: color 0.2s;
   position: relative;
   width: 21px;

@@ -1,5 +1,4 @@
-import { useMediaQuery } from "react-responsive";
-import { Link } from "react-router-dom";
+import {useMediaQuery} from "react-responsive";
 
 import SolarStarBold from "../../components/SvgIcons/SolarStarBold.jsx";
 import SolarMoonBold from "../../components/SvgIcons/SolarMoonBold.jsx";
@@ -12,17 +11,12 @@ import {
 import Links from "./components/Links.jsx";
 import Skills from "./components/Skills.jsx";
 import Star from "../../components/Star/Star.jsx";
-import Pulsating from "../../components/Pulsating/Pulsating.jsx";
-import Button from "../../components/Button/Button.jsx";
-
-import { colors } from "../../main.style.js";
-
 
 const Home = () => {
-    const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
+    const isMobile = useMediaQuery({query: "(max-width: 1024px)"});
     return (<Layout>
         <BackgroundLayout>
-            {Array.from({ length: isMobile ? 15 : 30 }, (_, k) => k + 1).map((index) => (<Star key={index}>
+            {Array.from({length: isMobile ? 15 : 30}, (_, k) => k + 1).map((index) => (<Star key={index}>
                 <SolarStarBold/>
             </Star>))}
             <Moon>
@@ -41,12 +35,12 @@ const Home = () => {
         <Links/>
         <Skills/>
 
-        {(import.meta.env.DEV || (import.meta.env.PROD && import.meta.env.VITE_URL_LIVETRACK)) ?
-            <Pulsating visible={true} color={colors.third} height={32} width={132}>
-                <Link to="/liveTrack">
-                    <Button>LiveTrack</Button>
-                </Link>
-            </Pulsating> : null}
+        {/*{(import.meta.env.DEV || (import.meta.env.PROD && import.meta.env.VITE_URL_LIVETRACK)) ?*/}
+        {/*    <Pulsating visible={true} color={colors.third} height={32} width={132}>*/}
+        {/*        <Link to="/liveTrack">*/}
+        {/*            <Button>LiveTrack</Button>*/}
+        {/*        </Link>*/}
+        {/*    </Pulsating> : null}*/}
     </Layout>);
 };
 

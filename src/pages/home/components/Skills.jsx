@@ -10,20 +10,12 @@ import SkillIconsReactDark from "../../../components/SvgIcons/SkillIconsReactDar
 import SkillIconsDocker from "../../../components/SvgIcons/SkillIconsDocker.jsx";
 import SkillIconsNodejsDark from "../../../components/SvgIcons/SkillIconsNodejsDark.jsx";
 import SolarMenuDotsBoldDuotone from "../../../components/SvgIcons/SolarMenuDotsBoldDuotone.jsx";
-import SkillIconsNextjsLight from "../../../components/SvgIcons/SkillIconsNextjsLight.jsx";
+import SkillIconsAwsDark from "../../../components/SvgIcons/SkillIconsAwsDark.jsx";
+import SkillIconsNextjsDark from "../../../components/SvgIcons/SkillIconsNextjsDark.jsx";
 
 const Skills = () => {
     return (
         <SkillsContainer>
-            <Skill title={["C#"]}>
-                <SkillIconsCs/>
-            </Skill>
-            <Skill title={[".NET Core"]}>
-                <SkillIconsDotnet/>
-            </Skill>
-            <Skill title={["Microsoft Azure"]}>
-                <SkillIconsAzureDark/>
-            </Skill>
             <Skill title={["Javascript"]}>
                 <SkillIconsJavascript/>
             </Skill>
@@ -37,14 +29,26 @@ const Skills = () => {
                 <SkillIconsReactDark/>
             </Skill>
             <Skill title={["Next.js"]}>
-                <SkillIconsNextjsLight/>
+                <SkillIconsNextjsDark/>
+            </Skill>
+            <Skill title={["C#"]}>
+                <SkillIconsCs/>
+            </Skill>
+            <Skill title={[".NET Core"]}>
+                <SkillIconsDotnet/>
+            </Skill>
+            <Skill title={["Microsoft Azure"]}>
+                <SkillIconsAzureDark/>
+            </Skill>
+            <Skill title={["AWS"]}>
+                <SkillIconsAwsDark/>
             </Skill>
             <Skill title={["Docker"]}>
                 <SkillIconsDocker/>
             </Skill>
 
             <Skill title={['Git', 'Redis', 'MongoDb', 'Sql Server', 'PostgreSql']} more={true}>
-                <SolarMenuDotsBoldDuotone />
+                <SolarMenuDotsBoldDuotone/>
             </Skill>
         </SkillsContainer>
     )
