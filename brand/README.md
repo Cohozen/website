@@ -1,7 +1,7 @@
 # Corentin Le Gal — logo
 
-Monogramme **CLG** au pochoir (Big Shoulders Stencil, graisse 800), posé sur la ligne d'horizon
-du site : la nuit au-dessus, l'horizon cobalt, le sol en dessous. Le texte est vectorisé : aucun
+Monogramme **CLG** au pochoir (police CLG Stencil, graisse 800). Seul, il s'utilise en une encre ;
+dans l'avatar, il se tient debout sur l'horizon du site : ciel cobalt au-dessus, nuit en dessous. Le texte est vectorisé : aucun
 fichier n'a besoin de la police.
 
 Tout est généré : ne pas retoucher à la main, modifier `scripts/brand.py` puis relancer.

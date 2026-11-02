@@ -451,9 +451,9 @@
     {
       "name": "Monogramme sur l'horizon",
       "kind": "custom",
-      "description": "CLG au pochoir traversé à mi-hauteur par l'horizon : trait cobalt sur clair, #6f86ff sur sombre.",
-      "html": "<div class=\"ds-mono\"><span class=\"ds-mono-nuit\">CLG<i></i></span><span class=\"ds-mono-jour\">CLG<i></i></span></div>",
-      "css": ".ds-mono { display: flex; } .ds-mono > span { position: relative; display: inline-block; padding: 32px 40px; font-family: 'CLG Stencil', 'Arial Narrow', sans-serif; font-weight: 800; font-size: 4rem; line-height: 1; } .ds-mono i { position: absolute; left: 28px; right: 28px; top: 50%; height: 4px; transform: translateY(-50%); } .ds-mono-nuit { background: var(--nuit, #050505); color: var(--jour, #f7f5ff); } .ds-mono-nuit i { background: #6f86ff; } .ds-mono-jour { background: var(--blanc, #fff); color: var(--e-sombre, #0b0d1a); } .ds-mono-jour i { background: var(--cobalt, #0a33ff); }"
+      "description": "CLG au pochoir, seul et en une encre ; dans l'avatar et le favicon, debout sur l'horizon de lumière (ciel cobalt au-dessus, nuit en dessous).",
+      "html": "<div class=\"ds-mono\"><span class=\"ds-mono-nuit\">CLG</span><span class=\"ds-mono-jour\">CLG</span></div>",
+      "css": ".ds-mono { display: flex; } .ds-mono > span { display: inline-block; padding: 32px 40px 0; font-family: 'CLG Stencil', 'Arial Narrow', sans-serif; font-weight: 800; font-size: 4rem; line-height: 0.8; } .ds-mono-nuit { padding-bottom: 32px; background: linear-gradient(to bottom, #050505, #0b0f2e 50%, #0a33ff 76%, #03040c 76%, #050505); color: var(--jour, #f7f5ff); } .ds-mono-jour { padding-bottom: 32px; background: var(--blanc, #fff); color: var(--e-sombre, #0b0d1a); }"
     }
   ],
   "narrative": {
@@ -486,7 +486,7 @@
       },
       {
         "name": "The Cobalt Horizon Rule",
-        "body": "Le cobalt trace l'horizon. Partout où un objet doit se tenir debout (le nom dans la nuit, le monogramme, les écrans de projet), il se tient sur un filet cobalt.",
+        "body": "Le cobalt trace l'horizon. Partout où un objet doit se tenir debout (le nom dans la nuit, les écrans de projet), il se tient sur un filet cobalt ; dans l'avatar du monogramme, l'horizon est la lumière cobalt elle-même, sans trait. Jamais de trait qui traverse des lettres : il se lit comme une rature.",
         "section": "colors"
       },
       {
@@ -517,7 +517,7 @@
       "Do poser ce qui doit se tenir debout sur un filet cobalt de 2 px.",
       "Do écrire noms, titres et étiquettes au pochoir en capitales, et tout le reste en Albert Sans.",
       "Do composer les numéros de conduite en Albert Sans 600 tabulaire.",
-      "Do tracer le trait du monogramme en `cobalt` sur fond clair et en `horizon-nuit` sur fond sombre.",
+      "Do poser le monogramme debout sur l'horizon de lumière dans l'avatar, et le laisser seul ailleurs.",
       "Do garder des angles droits, des filets fins et des cibles tactiles de 44 px.",
       "Do couper tout mouvement sous `prefers-reduced-motion`.",
       "Do générer police et fichiers de marque avec `scripts/brand.py`."

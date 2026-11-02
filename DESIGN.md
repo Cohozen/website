@@ -163,8 +163,8 @@ Refus confirmés : le ton consultant et le blanc éditorial (c'est le monde de C
 Une suite de lumières de scène, de la plus sombre à la plus claire, chacune doublée de ses encres. Toutes les valeurs sont des propriétés personnalisées sur `:root` dans `src/styles/global.css` (sauf `horizon-nuit`, `violet-transition` et la rampe des cues, écrites en littéral dans la page) ; `scripts/brand.py` reprend les mêmes valeurs pour le logo.
 
 ### Primary
-- **Cobalt d'horizon** (`cobalt`) : la ligne d'horizon. Filet de 2 px au sol de la nuit, filet sous les captures de projet, trait du monogramme sur fond clair, aplat de la phase « Montée cobalt », fond du pupitre dans cette phase, survol du bouton plein, sélection de texte, barre de défilement.
-- **Cobalt de nuit** (`horizon-nuit`) : le même cobalt éclairci pour rester lisible sur le noir. Trait du monogramme sur fond sombre, étiquettes des repères de la nuit.
+- **Cobalt d'horizon** (`cobalt`) : la ligne d'horizon. Filet de 2 px au sol de la nuit, filet sous les captures de projet, ciel de l'avatar sous le monogramme, aplat de la phase « Montée cobalt », fond du pupitre dans cette phase, survol du bouton plein, sélection de texte, barre de défilement.
+- **Cobalt de nuit** (`horizon-nuit`) : le même cobalt éclairci pour rester lisible sur le noir. Étiquettes des repères de la nuit.
 
 ### Secondary
 - **Rose de scène** (`rose`) : aplat de la phase « Rose », celle du parcours ; première cue (LX 3.1) et fond du pupitre dans cette phase.
@@ -190,7 +190,7 @@ Une suite de lumières de scène, de la plus sombre à la plus claire, chacune d
 
 **The Wide Field Rule.** La lumière se pose en larges champs : un aplat, un fondu vertical, une source radiale décentrée de 55 à 150 % de large. Jamais une lueur de bord, un halo autour d'un objet ou un néon.
 
-**The Cobalt Horizon Rule.** Le cobalt trace l'horizon. Partout où un objet doit se tenir debout (le nom dans la nuit, le monogramme, les écrans de projet), il se tient sur un filet cobalt.
+**The Cobalt Horizon Rule.** Le cobalt trace l'horizon. Partout où un objet doit se tenir debout (le nom dans la nuit, les écrans de projet), il se tient sur un filet cobalt ; dans l'avatar du monogramme, l'horizon est la lumière cobalt elle-même, sans trait. Jamais de trait qui traverse des lettres : il se lit comme une rature.
 
 ## Typography
 
@@ -222,7 +222,7 @@ CLG Stencil est générée par `scripts/brand.py` et auto-hébergée dans `publi
 
 Un conteneur de 1280 px au plus (`container`), marges latérales `page`, et une pile verticale de phases pleine largeur. Chaque phase s'ouvre sur un fondu : pendant `fondu` (160 à 260 px), la lumière de la phase précédente (`--avant`) se fond dans la sienne (`--lumiere`), puis le contenu se pose sur l'aplat, 24 px plus bas ; elle se ferme sur `phase-end`. Le parcours supprime ce bas : ses cues vont jusqu'au bord et passent la main à l'aube.
 
-La nuit occupe au moins tout l'écran (`max(100svh, 640px)`). Son horizon est à 64 % de la hauteur (46 % sous 640 px) : le nom repose dessus, la présentation et les repères commencent juste dessous, sur une grille 5/7. Le monogramme est en haut à gauche (72 px, 44 px sous 640 px). Les phases suivantes utilisent des grilles asymétriques : 12 colonnes pour le métier (titre sur 7, texte sur les 5 dernières, plan de feux sur toute la largeur en 3 colonnes), 3/4/5 pour une cue, 5/7 pour un projet, 7/5 pour le plein jour. La gouttière horizontale est `gutter` ou monte jusqu'à 64 à 80 px entre texte et image.
+La nuit occupe au moins tout l'écran (`max(100svh, 640px)`). Son horizon est à 64 % de la hauteur (46 % sous 640 px) : le nom repose dessus, la présentation et les repères commencent juste dessous, sur une grille 4/8. Le monogramme est en haut à gauche (72 px, 44 px sous 640 px). Les phases suivantes utilisent des grilles asymétriques : 12 colonnes pour le métier (titre sur 7, texte sur les 5 dernières, plan de feux sur toute la largeur en 3 colonnes), 3/4/5 pour une cue, 5/7 pour un projet, 7/5 pour le plein jour. La gouttière horizontale est `gutter` ou monte jusqu'à 64 à 80 px entre texte et image.
 
 Réponses observées : sous 1024 px, la nuit, le métier, les projets et le plein jour passent en une colonne, le plan de feux en deux, une cue en 1/2 ; sous 640 px, tout est en une colonne, et la maison passe au-dessus de ses années. Toute cible tactile mesure au moins 44 px.
 
@@ -267,7 +267,7 @@ Le parcours en quatre bandes pleine largeur, numérotées LX 3.1 à LX 3.4, chac
 Texte sur 5 colonnes, captures sur 7. Le titre se tient à côté de l'icône de 72 px (rayon 16 px), puis l'accroche, le corps en `e2-aube`, la mention de sortie (étiquette pochoir entre deux filets d'encre de 1 px) tant que le statut est `bientot`, la stack en meta, et le bouton à filet vers le site. Les captures sont deux écrans alignés par le bas, le second à 88 %, debout sur un filet cobalt de 2 px : des silhouettes sur l'horizon. Un projet = un fichier dans `src/content/projets/`.
 
 ### Monogramme
-CLG au pochoir 800, vectorisé, traversé à mi-hauteur par la ligne d'horizon : une coupe masque les lettres et un trait déborde de chaque côté. Le trait est `cobalt` sur fond clair, `horizon-nuit` sur fond sombre ; les lettres suivent l'encre (`currentColor`). Le même dessin sert de logo, d'avatar, de favicon et de marque de pied de page. Tout fichier de marque est généré par `scripts/brand.py`, jamais retouché à la main.
+CLG au pochoir 800, vectorisé, sans trait ni coupe ajoutés. Seul, il suit l'encre (`currentColor`) : marque d'en-tête et de pied de page, symbole une encre. Dans l'avatar et le favicon, il se tient debout sur l'horizon : ciel nuit puis cobalt au-dessus de sa ligne de base, nuit en dessous. Dans la version longue, le nom suit sur la même ligne de base. Tout fichier de marque est généré par `scripts/brand.py`, jamais retouché à la main.
 
 ### Horizon de la nuit (mouvement)
 Le seul mouvement écrit de la page. Au chargement, la lumière cobalt au-dessus de l'horizon se lève : de 55 à 100 % de sa hauteur et de 35 à 100 % d'opacité, en 1,6 s `cubic-bezier(0.16, 1, 0.3, 1)`. Au défilement (là où `animation-timeline: scroll()` existe), elle s'intensifie sur la première hauteur d'écran jusqu'à 190 % de hauteur, saturation 1,3 et luminosité 1,25. Sous `prefers-reduced-motion`, rien ne bouge : la lumière est fixe et les transitions du pupitre, des flèches et des boutons sont coupées.
@@ -281,7 +281,7 @@ Le seul mouvement écrit de la page. Au chargement, la lumière cobalt au-dessus
 - **Do** poser ce qui doit se tenir debout sur un filet cobalt de 2 px.
 - **Do** écrire noms, titres et étiquettes au pochoir en capitales, et tout le reste en Albert Sans.
 - **Do** composer les numéros de conduite en Albert Sans 600 tabulaire.
-- **Do** tracer le trait du monogramme en `cobalt` sur fond clair et en `horizon-nuit` sur fond sombre.
+- **Do** poser le monogramme debout sur l'horizon de lumière dans l'avatar, et le laisser seul ailleurs.
 - **Do** garder des angles droits, des filets fins et des cibles tactiles de 44 px.
 - **Do** couper tout mouvement sous `prefers-reduced-motion`.
 - **Do** générer police et fichiers de marque avec `scripts/brand.py`.

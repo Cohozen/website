@@ -41,8 +41,8 @@ l'indicateur de phase courante (« Q 001 · Nuit »). Pas de bouton d'action.
 FORM: Cyclorama de théâtre, nuit vers jour (challenger catalogue
 stagecraft-theater-lighting-cyclorama-dawn, choisi au tour audacieux). Signature : la phase de
 lumière est liée au défilement (scroll-driven animation), l'indicateur de conduite suit ;
-mouvement réduit : bandes fixes, sans transition. Le monogramme CLG au pochoir, traversé par la
-ligne d'horizon, sert de logo, d'avatar et de favicon. Seed key 62b52668.
+mouvement réduit : bandes fixes, sans transition. Le monogramme CLG au pochoir, debout sur
+l'horizon de lumière, sert de logo, d'avatar et de favicon. Seed key 62b52668.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
