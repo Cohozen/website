@@ -9,7 +9,7 @@
 #    l'original, le pied du L est détaché de la fût et se lit comme un point (« GAL. »). Ici le
 #    pied tient à la fût et la coupe pochoir passe horizontalement à mi-hauteur. Renommée
 #    « CLG Stencil » (version modifiée, licence OFL inchangée : public/fonts/OFL.txt).
-# 2. Logo : monogramme CLG traversé par la ligne d'horizon, vectorisé depuis cette police.
+# 2. Logo : monogramme CLG debout sur l'horizon, vectorisé depuis cette police.
 # Couleurs = src/styles/global.css ; relancer si elles changent.
 import io
 import os
@@ -34,10 +34,8 @@ UNICODES = [*range(0x20, 0x7F), *range(0xA0, 0x100), 0x152, 0x153, 0x2013, 0x201
 
 NUIT = "#050505"
 COBALT = "#0a33ff"
-ROSE = "#ff6aae"
 JOUR = "#ffffff"
 ENCRE = "#0b0d1a"
-HORIZON_NUIT = "#6f86ff"  # cobalt éclairci, lisible sur fond sombre
 
 _cache = {}
 
@@ -147,87 +145,62 @@ def ecrire(path, svg):
         f.write(svg)
 
 
-# --- monogramme : CLG coupé par l'horizon à mi-hauteur ---------------------------------------
-# Unités : texte de corps 100, ligne de base à y=0, capitale ≈ 80. La coupe d'horizon recouvre la
-# coupe pochoir du L redessiné et passe au-dessus de l'éperon du G, qui reste lisible.
+# --- monogramme : CLG au pochoir, seul ---------------------------------------------------------
+# Unités : texte de corps 100, ligne de base à y=0, capitale ≈ 80. L'horizon n'est pas un trait :
+# c'est la lumière du ciel de l'avatar, sur laquelle les lettres se tiennent debout.
 def monogramme():
     d, _, (x0, y0, x1, _) = texte("CLG", 800, 100, track=0.07)
-    cap = -y0
-    return dict(d=d, x0=x0, w=x1 - x0, cap=cap, horizon=-cap * 0.5, coupe=cap * 0.09,
-                trait=cap * 0.03)
+    return dict(d=d, x0=x0, w=x1 - x0, cap=-y0)
 
 
-def symbole_svg(m, color, deborde, W, H, tx, ty, k, extra="", trait=COBALT):
-    """Lettres masquées par la coupe d'horizon + le trait d'horizon qui déborde des lettres."""
-    hy, c, t = m["horizon"], m["coupe"], m["trait"]
-    gauche = m["x0"] - deborde
+def svg(W, H, corps):
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W:.2f} {H:.2f}" width="{W:.0f}" height="{H:.0f}">
-  <title>Corentin Le Gal</title>
-  <defs>
-    <mask id="coupe" maskUnits="userSpaceOnUse" x="-1000" y="-1000" width="3000" height="3000">
-      <rect x="-1000" y="-1000" width="3000" height="3000" fill="#fff"/>
-      <rect x="-1000" y="{hy - c / 2:.2f}" width="3000" height="{c:.2f}" fill="#000"/>
-    </mask>
-  </defs>{extra}
-  <g transform="translate({tx:.2f} {ty:.2f}) scale({k:.4f})" fill="{color}">
-    <path mask="url(#coupe)" d="{m['d']}"/>
-    <rect class="horizon" fill="{trait}" x="{gauche:.2f}" y="{hy - t / 2:.2f}" width="{m['w'] + 2 * deborde:.2f}" height="{t:.2f}"/>
-  </g>
+  <title>Corentin Le Gal</title>{corps}
 </svg>
 """
 
 
-def symbole(color, trait=COBALT):
+def symbole(color):
     m = monogramme()
-    deborde = 10
-    W = m["w"] + 2 * deborde
-    H = m["cap"] + 4
-    return symbole_svg(m, color, deborde, W, H, deborde - m["x0"], m["cap"] + 2, 1, trait=trait)
+    marge = 2
+    W, H = m["w"] + 2 * marge, m["cap"] + 2 * marge
+    return svg(W, H, f"""
+  <path transform="translate({marge - m['x0']:.2f} {marge + m['cap']:.2f})" fill="{color}" d="{m['d']}"/>""")
 
 
-# --- avatar carré : la coupe d'horizon devient l'horizon du ciel ------------------------------
+# --- avatar carré : CLG debout sur l'horizon, ciel cobalt au-dessus, nuit en dessous ----------
 def avatar(size=512):
     m = monogramme()
     k = size * 0.64 / m["w"]
     base = size * 0.5 + m["cap"] * k / 2
-    horizon = base + m["horizon"] * k
-    h = horizon / size
-    ciel = f"""
-  <linearGradient id="ciel" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="{NUIT}"/>
-    <stop offset="{h * 0.55:.3f}" stop-color="#0b0f2e"/>
-    <stop offset="{h:.3f}" stop-color="{COBALT}"/>
-    <stop offset="{h:.3f}" stop-color="#03040c"/>
-    <stop offset="1" stop-color="{NUIT}"/>
-  </linearGradient>
-  <rect width="{size}" height="{size}" fill="url(#ciel)"/>"""
-    deborde = (size / k - m["w"]) / 2 + 2
-    return symbole_svg(m, JOUR, deborde, size, size, (size - m["w"] * k) / 2 - m["x0"] * k, base,
-                       k, extra=ciel.replace("<linearGradient", "<defs><linearGradient")
-                       .replace("</linearGradient>", "</linearGradient></defs>"))
+    h = base / size
+    return svg(size, size, f"""
+  <defs>
+    <linearGradient id="ciel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="{NUIT}"/>
+      <stop offset="{h * 0.6:.3f}" stop-color="#0b0f2e"/>
+      <stop offset="{h:.3f}" stop-color="{COBALT}"/>
+      <stop offset="{h:.3f}" stop-color="#03040c"/>
+      <stop offset="1" stop-color="{NUIT}"/>
+    </linearGradient>
+  </defs>
+  <rect width="{size}" height="{size}" fill="url(#ciel)"/>
+  <path transform="translate({(size - m['w'] * k) / 2 - m['x0'] * k:.2f} {base:.2f}) scale({k:.4f})" fill="{JOUR}" d="{m['d']}"/>""")
 
 
-# --- logo horizontal : CLG coupé par l'horizon, le nom debout dessus --------------------------
-def logo(color, trait=COBALT):
+# --- logo horizontal : CLG puis le nom, sur la même ligne de base ----------------------------
+def logo(color):
     m = monogramme()
-    nd, _, (nx0, ny0, nx1, _) = texte("CORENTIN LE GAL", 600, 34, track=0.08)
-    sep = 22
-    nom_x = m["x0"] + m["w"] + sep
-    largeur = nom_x + (nx1 - nx0) - m["x0"]
-    deborde_d = largeur - m["w"]
-    hy, c = m["horizon"], m["coupe"]
-    nom_base = hy - m["trait"] / 2 - 4
-    W = largeur + 12
-    H = m["cap"] + 4
-    svg = symbole_svg(m, color, 0, W, H, 6 - m["x0"], m["cap"] + 2, 1, trait=trait)
-    # le trait d'horizon se prolonge sous le nom, qui se tient dessus
-    svg = svg.replace(
-        f'width="{m["w"]:.2f}" height="{m["trait"]:.2f}"/>',
-        f'width="{m["w"] + deborde_d:.2f}" height="{m["trait"]:.2f}"/>\n'
-        f'    <path transform="translate({nom_x - nx0:.2f} {nom_base:.2f})" d="{nd}"/>',
-    )
-    assert c  # la coupe reste celle du monogramme
-    return svg
+    nd, _, (nx0, _, nx1, _) = texte("CORENTIN LE GAL", 600, 34, track=0.08)
+    marge, sep = 2, 22
+    base = marge + m["cap"]
+    nom_x = marge + m["w"] + sep
+    W, H = nom_x + (nx1 - nx0) + marge, m["cap"] + 2 * marge
+    return svg(W, H, f"""
+  <g fill="{color}">
+    <path transform="translate({marge - m['x0']:.2f} {base:.2f})" d="{m['d']}"/>
+    <path transform="translate({nom_x - nx0:.2f} {base:.2f})" d="{nd}"/>
+  </g>""")
 
 
 # --- image de partage 1200 × 630 : le premier écran du site, en petit ------------------------
@@ -262,10 +235,9 @@ if __name__ == "__main__":
     ecrire("brand/og.svg", partage())
     ecrire("brand/clg-avatar.svg", avatar())
     ecrire("brand/clg-symbole-encre.svg", symbole(ENCRE))
-    ecrire("brand/clg-symbole-blanc.svg", symbole(JOUR, HORIZON_NUIT))
+    ecrire("brand/clg-symbole-blanc.svg", symbole(JOUR))
     ecrire("brand/corentin-le-gal-logo-encre.svg", logo(ENCRE))
-    ecrire("brand/corentin-le-gal-logo-blanc.svg", logo(JOUR, HORIZON_NUIT))
+    ecrire("brand/corentin-le-gal-logo-blanc.svg", logo(JOUR))
     ecrire("public/favicon.svg", avatar(64))
-    # la page colore le trait (.horizon) selon le fond
-    ecrire("src/assets/monogramme.svg", symbole("currentColor", "currentColor"))
+    ecrire("src/assets/monogramme.svg", symbole("currentColor"))
     print("public/fonts, brand/ et public/favicon.svg générés")
