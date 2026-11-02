@@ -28,11 +28,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonical} />
         <meta property="og:image" content={new URL("/og.png", Astro.site)} />
-        <script
-            is:inline
-            async
-            data-domain="corentinlegal.dev"
-            src="https://plausible.corentinlegal.fr/js/script.js"></script>
     </head>
     <body>
         <slot />
