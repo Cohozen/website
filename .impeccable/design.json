@@ -1,0 +1,536 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-02T00:00:00.000Z",
+  "title": "Design System: Corentin Le Gal",
+  "extensions": {
+    "colorMeta": {
+      "nuit": {
+        "role": "neutral",
+        "displayName": "Noir cyclo",
+        "canonical": "#050505",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(26% 0.000 89.9)",
+          "oklch(38% 0.000 89.9)",
+          "oklch(49% 0.000 89.9)",
+          "oklch(61% 0.000 89.9)",
+          "oklch(72% 0.000 89.9)",
+          "oklch(84% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "sol": {
+        "role": "neutral",
+        "displayName": "Sol",
+        "canonical": "#03040c",
+        "tonalRamp": [
+          "oklch(15% 0.014 273.9)",
+          "oklch(26% 0.023 273.9)",
+          "oklch(38% 0.023 273.9)",
+          "oklch(49% 0.023 273.9)",
+          "oklch(61% 0.023 273.9)",
+          "oklch(72% 0.023 273.9)",
+          "oklch(84% 0.023 273.9)",
+          "oklch(95% 0.014 273.9)"
+        ]
+      },
+      "cobalt": {
+        "role": "primary",
+        "displayName": "Cobalt d'horizon",
+        "canonical": "#0a33ff",
+        "tonalRamp": [
+          "oklch(15% 0.174 264.7)",
+          "oklch(26% 0.290 264.7)",
+          "oklch(38% 0.290 264.7)",
+          "oklch(49% 0.290 264.7)",
+          "oklch(61% 0.290 264.7)",
+          "oklch(72% 0.290 264.7)",
+          "oklch(84% 0.290 264.7)",
+          "oklch(95% 0.174 264.7)"
+        ]
+      },
+      "horizon-nuit": {
+        "role": "primary",
+        "displayName": "Cobalt de nuit",
+        "canonical": "#6f86ff",
+        "tonalRamp": [
+          "oklch(15% 0.108 272.5)",
+          "oklch(26% 0.180 272.5)",
+          "oklch(38% 0.180 272.5)",
+          "oklch(49% 0.180 272.5)",
+          "oklch(61% 0.180 272.5)",
+          "oklch(72% 0.180 272.5)",
+          "oklch(84% 0.180 272.5)",
+          "oklch(95% 0.108 272.5)"
+        ]
+      },
+      "violet-transition": {
+        "role": "secondary",
+        "displayName": "Violet de passage",
+        "canonical": "#7a45d8",
+        "tonalRamp": [
+          "oklch(15% 0.127 294.7)",
+          "oklch(26% 0.212 294.7)",
+          "oklch(38% 0.212 294.7)",
+          "oklch(49% 0.212 294.7)",
+          "oklch(61% 0.212 294.7)",
+          "oklch(72% 0.212 294.7)",
+          "oklch(84% 0.212 294.7)",
+          "oklch(95% 0.127 294.7)"
+        ]
+      },
+      "rose": {
+        "role": "secondary",
+        "displayName": "Rose de scène",
+        "canonical": "#ff6aae",
+        "tonalRamp": [
+          "oklch(15% 0.116 354.5)",
+          "oklch(26% 0.193 354.5)",
+          "oklch(38% 0.193 354.5)",
+          "oklch(49% 0.193 354.5)",
+          "oklch(61% 0.193 354.5)",
+          "oklch(72% 0.193 354.5)",
+          "oklch(84% 0.193 354.5)",
+          "oklch(95% 0.116 354.5)"
+        ]
+      },
+      "cue-2": {
+        "role": "secondary",
+        "displayName": "Cue LX 3.2",
+        "canonical": "#ff7cb7",
+        "tonalRamp": [
+          "oklch(15% 0.116 354.5)",
+          "oklch(26% 0.193 354.5)",
+          "oklch(38% 0.193 354.5)",
+          "oklch(49% 0.193 354.5)",
+          "oklch(61% 0.193 354.5)",
+          "oklch(72% 0.193 354.5)",
+          "oklch(84% 0.193 354.5)",
+          "oklch(95% 0.116 354.5)"
+        ]
+      },
+      "cue-3": {
+        "role": "secondary",
+        "displayName": "Cue LX 3.3",
+        "canonical": "#ff8fc1",
+        "tonalRamp": [
+          "oklch(15% 0.116 354.5)",
+          "oklch(26% 0.193 354.5)",
+          "oklch(38% 0.193 354.5)",
+          "oklch(49% 0.193 354.5)",
+          "oklch(61% 0.193 354.5)",
+          "oklch(72% 0.193 354.5)",
+          "oklch(84% 0.193 354.5)",
+          "oklch(95% 0.116 354.5)"
+        ]
+      },
+      "cue-4": {
+        "role": "secondary",
+        "displayName": "Cue LX 3.4",
+        "canonical": "#ffa3cb",
+        "tonalRamp": [
+          "oklch(15% 0.116 354.5)",
+          "oklch(26% 0.193 354.5)",
+          "oklch(38% 0.193 354.5)",
+          "oklch(49% 0.193 354.5)",
+          "oklch(61% 0.193 354.5)",
+          "oklch(72% 0.193 354.5)",
+          "oklch(84% 0.193 354.5)",
+          "oklch(95% 0.116 354.5)"
+        ]
+      },
+      "aube": {
+        "role": "tertiary",
+        "displayName": "Aube",
+        "canonical": "#ffc1d6",
+        "tonalRamp": [
+          "oklch(15% 0.045 356.6)",
+          "oklch(26% 0.076 356.6)",
+          "oklch(38% 0.076 356.6)",
+          "oklch(49% 0.076 356.6)",
+          "oklch(61% 0.076 356.6)",
+          "oklch(72% 0.076 356.6)",
+          "oklch(84% 0.076 356.6)",
+          "oklch(95% 0.045 356.6)"
+        ]
+      },
+      "jour": {
+        "role": "neutral",
+        "displayName": "Jour",
+        "canonical": "#f7f5ff",
+        "tonalRamp": [
+          "oklch(15% 0.008 295.3)",
+          "oklch(26% 0.013 295.3)",
+          "oklch(38% 0.013 295.3)",
+          "oklch(49% 0.013 295.3)",
+          "oklch(61% 0.013 295.3)",
+          "oklch(72% 0.013 295.3)",
+          "oklch(84% 0.013 295.3)",
+          "oklch(95% 0.008 295.3)"
+        ]
+      },
+      "blanc": {
+        "role": "neutral",
+        "displayName": "Blanc",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(26% 0.000 89.9)",
+          "oklch(38% 0.000 89.9)",
+          "oklch(49% 0.000 89.9)",
+          "oklch(61% 0.000 89.9)",
+          "oklch(72% 0.000 89.9)",
+          "oklch(84% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "e-clair": {
+        "role": "neutral",
+        "displayName": "Encre claire",
+        "canonical": "#f7f5ff",
+        "tonalRamp": [
+          "oklch(15% 0.008 295.3)",
+          "oklch(26% 0.013 295.3)",
+          "oklch(38% 0.013 295.3)",
+          "oklch(49% 0.013 295.3)",
+          "oklch(61% 0.013 295.3)",
+          "oklch(72% 0.013 295.3)",
+          "oklch(84% 0.013 295.3)",
+          "oklch(95% 0.008 295.3)"
+        ]
+      },
+      "e2-nuit": {
+        "role": "neutral",
+        "displayName": "Encre seconde de nuit",
+        "canonical": "#a9adc4",
+        "tonalRamp": [
+          "oklch(15% 0.020 277.8)",
+          "oklch(26% 0.033 277.8)",
+          "oklch(38% 0.033 277.8)",
+          "oklch(49% 0.033 277.8)",
+          "oklch(61% 0.033 277.8)",
+          "oklch(72% 0.033 277.8)",
+          "oklch(84% 0.033 277.8)",
+          "oklch(95% 0.020 277.8)"
+        ]
+      },
+      "e2-cobalt": {
+        "role": "neutral",
+        "displayName": "Encre seconde du cobalt",
+        "canonical": "#d3dbff",
+        "tonalRamp": [
+          "oklch(15% 0.030 275.5)",
+          "oklch(26% 0.050 275.5)",
+          "oklch(38% 0.050 275.5)",
+          "oklch(49% 0.050 275.5)",
+          "oklch(61% 0.050 275.5)",
+          "oklch(72% 0.050 275.5)",
+          "oklch(84% 0.050 275.5)",
+          "oklch(95% 0.030 275.5)"
+        ]
+      },
+      "e-sombre": {
+        "role": "neutral",
+        "displayName": "Encre sombre",
+        "canonical": "#0b0d1a",
+        "tonalRamp": [
+          "oklch(15% 0.017 276.3)",
+          "oklch(26% 0.028 276.3)",
+          "oklch(38% 0.028 276.3)",
+          "oklch(49% 0.028 276.3)",
+          "oklch(61% 0.028 276.3)",
+          "oklch(72% 0.028 276.3)",
+          "oklch(84% 0.028 276.3)",
+          "oklch(95% 0.017 276.3)"
+        ]
+      },
+      "e2-rose": {
+        "role": "neutral",
+        "displayName": "Encre seconde du rose",
+        "canonical": "#3a1027",
+        "tonalRamp": [
+          "oklch(15% 0.044 349.7)",
+          "oklch(26% 0.073 349.7)",
+          "oklch(38% 0.073 349.7)",
+          "oklch(49% 0.073 349.7)",
+          "oklch(61% 0.073 349.7)",
+          "oklch(72% 0.073 349.7)",
+          "oklch(84% 0.073 349.7)",
+          "oklch(95% 0.044 349.7)"
+        ]
+      },
+      "e2-aube": {
+        "role": "neutral",
+        "displayName": "Encre seconde de l'aube",
+        "canonical": "#4a2234",
+        "tonalRamp": [
+          "oklch(15% 0.039 353.2)",
+          "oklch(26% 0.065 353.2)",
+          "oklch(38% 0.065 353.2)",
+          "oklch(49% 0.065 353.2)",
+          "oklch(61% 0.065 353.2)",
+          "oklch(72% 0.065 353.2)",
+          "oklch(84% 0.065 353.2)",
+          "oklch(95% 0.039 353.2)"
+        ]
+      },
+      "e2-jour": {
+        "role": "neutral",
+        "displayName": "Encre seconde du jour",
+        "canonical": "#44465a",
+        "tonalRamp": [
+          "oklch(15% 0.020 280.3)",
+          "oklch(26% 0.034 280.3)",
+          "oklch(38% 0.034 280.3)",
+          "oklch(49% 0.034 280.3)",
+          "oklch(61% 0.034 280.3)",
+          "oklch(72% 0.034 280.3)",
+          "oklch(84% 0.034 280.3)",
+          "oklch(95% 0.020 280.3)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Le nom, debout sur l'horizon de la nuit ; deux lignes sous 640 px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Un titre par phase, 14 caractères au plus par ligne."
+      },
+      "project-title": {
+        "displayName": "Project title",
+        "purpose": "Nom d'un projet, à côté de son icône."
+      },
+      "cue-title": {
+        "displayName": "Cue title",
+        "purpose": "Nom d'une maison dans une cue du parcours."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Pupitre, étiquettes des repères, termes du plan de feux, mention de sortie ; 14 à 17 px, approche 0,1 à 0,14 em, capitales."
+      },
+      "tagline": {
+        "displayName": "Tagline",
+        "purpose": "Accroche d'un projet."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Phrase d'ouverture d'une phase, à l'encre principale."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texte courant, encre seconde de la phase, 62 caractères au plus, chiffres tabulaires."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Années, rôles, stack d'un projet, valeurs des repères, pied de page."
+      },
+      "cue-numeral": {
+        "displayName": "Cue numeral",
+        "purpose": "Numéros de conduite (LX 1, 1.2, LX 3.4) : jamais au pochoir, le 1 s'y lit comme un I."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-lumiere",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Lever de l'horizon, changement de couleur du pupitre, avance des flèches."
+      },
+      {
+        "name": "lever",
+        "value": "1.6s cubic-bezier(0.16, 1, 0.3, 1) both; from opacity 0.35, scaleY(0.55)",
+        "purpose": "Au chargement, la lumière cobalt au-dessus de l'horizon de la nuit se lève."
+      },
+      {
+        "name": "monter",
+        "value": "linear both; animation-timeline: scroll(root); animation-range: 0 100svh; to scaleY(1.9) saturate(1.3) brightness(1.25)",
+        "purpose": "Au défilement, l'horizon s'intensifie en quittant la nuit (sous @supports animation-timeline)."
+      },
+      {
+        "name": "conduite",
+        "value": "0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Couleur, fond et filet du pupitre quand la phase change."
+      },
+      {
+        "name": "fleche",
+        "value": "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); translate(2px, -2px)",
+        "purpose": "Avance diagonale de la flèche au survol d'un lien."
+      },
+      {
+        "name": "etat",
+        "value": "0.25s",
+        "purpose": "Fond et couleur des boutons au survol ; filet des repères en 0.3s."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Aucune animation de l'horizon ; transitions du pupitre, des flèches et des boutons coupées."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "640px"
+      },
+      {
+        "name": "tablette",
+        "value": "1024px"
+      },
+      {
+        "name": "rail",
+        "value": "1200px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Bouton à filet",
+      "kind": "button",
+      "refersTo": "action",
+      "description": "Lien d'action sur une phase claire : filet à l'encre courante, plein au survol.",
+      "html": "<div class=\"ds-aube\"><a href=\"#\" class=\"ds-action\">trycast.fr<svg class=\"ds-fleche\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M3 13 13 3M5.5 3H13v7.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg></a></div>",
+      "css": ".ds-aube { background: var(--aube, #ffc1d6); color: var(--e-sombre, #0b0d1a); padding: 32px; } .ds-action { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border: 1.5px solid currentColor; border-radius: 0; color: inherit; font-family: 'Albert Sans Variable', 'Helvetica Neue', Arial, sans-serif; font-weight: 600; font-size: 1.125rem; text-decoration: none; transition: background-color 0.25s, color 0.25s; } .ds-action:hover { background: var(--e-sombre, #0b0d1a); color: var(--aube, #ffc1d6); } .ds-action:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; } .ds-fleche { width: 0.8em; height: 0.8em; flex: none; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); } a:hover .ds-fleche { transform: translate(2px, -2px); }"
+    },
+    {
+      "name": "Bouton plein",
+      "kind": "button",
+      "refersTo": "action-pleine",
+      "description": "Action principale du plein jour : encre pleine, cobalt d'horizon au survol.",
+      "html": "<div class=\"ds-jour\"><a href=\"#\" class=\"ds-action-pleine\">cernix.fr<svg class=\"ds-fleche\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M3 13 13 3M5.5 3H13v7.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg></a></div>",
+      "css": ".ds-jour { background: var(--jour, #f7f5ff); color: var(--e-sombre, #0b0d1a); padding: 32px; } .ds-action-pleine { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: var(--e-sombre, #0b0d1a); color: var(--jour, #f7f5ff); border: 1.5px solid var(--e-sombre, #0b0d1a); border-radius: 0; font-family: 'Albert Sans Variable', 'Helvetica Neue', Arial, sans-serif; font-weight: 600; font-size: 1.125rem; text-decoration: none; transition: background-color 0.25s, color 0.25s, border-color 0.25s; } .ds-action-pleine:hover { background: var(--cobalt, #0a33ff); border-color: var(--cobalt, #0a33ff); color: var(--blanc, #fff); } .ds-action-pleine:focus-visible { outline: 2px solid var(--e-sombre, #0b0d1a); outline-offset: 4px; } .ds-fleche { width: 0.8em; height: 0.8em; flex: none; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); } a:hover .ds-fleche { transform: translate(2px, -2px); }"
+    },
+    {
+      "name": "Pupitre de conduite",
+      "kind": "nav",
+      "refersTo": "conduite-cobalt",
+      "description": "Indicateur de phase : numéro de conduite en Albert Sans, nom au pochoir, sur l'aplat de la phase courante.",
+      "html": "<div class=\"ds-pupitres\"><p class=\"ds-conduite ds-c-nuit\"><span class=\"ds-q\">LX 1</span><span>Nuit</span></p><p class=\"ds-conduite ds-c-cobalt\"><span class=\"ds-q\">LX 2</span><span>Montée cobalt</span></p><p class=\"ds-conduite ds-c-rose\"><span class=\"ds-q\">LX 3</span><span>Rose</span></p><p class=\"ds-conduite ds-c-aube\"><span class=\"ds-q\">LX 4</span><span>Aube</span></p><p class=\"ds-conduite ds-c-jour\"><span class=\"ds-q\">LX 5</span><span>Plein jour</span></p></div>",
+      "css": ".ds-pupitres { display: flex; flex-wrap: wrap; gap: 12px; padding: 24px; background: var(--nuit, #050505); } .ds-conduite { margin: 0; display: flex; gap: 12px; align-items: baseline; padding: 7px 12px 6px; font-family: 'CLG Stencil', 'Arial Narrow', sans-serif; font-weight: 700; font-size: 0.9375rem; line-height: 1; letter-spacing: 0.14em; text-transform: uppercase; border: 1px solid rgb(247 245 255 / 0.3); color: var(--e-clair, #f7f5ff); transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1); } .ds-q { font-family: 'Albert Sans Variable', 'Helvetica Neue', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; opacity: 0.75; } .ds-c-nuit { background: var(--nuit, #050505); } .ds-c-cobalt { background: var(--cobalt, #0a33ff); } .ds-c-rose, .ds-c-aube, .ds-c-jour { color: var(--e-sombre, #0b0d1a); border-color: rgb(11 13 26 / 0.3); } .ds-c-rose { background: var(--rose, #ff6aae); } .ds-c-aube { background: var(--aube, #ffc1d6); } .ds-c-jour { background: var(--jour, #f7f5ff); }"
+    },
+    {
+      "name": "Repère de conduite",
+      "kind": "custom",
+      "refersTo": "repere",
+      "description": "Lien de la nuit : étiquette numérotée au pochoir, valeur soulignée d'un filet.",
+      "html": "<ul class=\"ds-reperes\" role=\"list\"><li><a href=\"#\"><span class=\"ds-repere-label\"><span class=\"ds-repere-num\">1.1</span>GitHub</span><span class=\"ds-repere-valeur\">Cohozen<svg class=\"ds-fleche\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M3 13 13 3M5.5 3H13v7.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg></span></a></li><li><a href=\"#\"><span class=\"ds-repere-label\"><span class=\"ds-repere-num\">1.4</span>En cours</span><span class=\"ds-repere-valeur\">TryCast<svg class=\"ds-fleche\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M8 2v12M3 9l5 5 5-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg></span></a></li></ul>",
+      "css": ".ds-reperes { list-style: none; margin: 0; padding: 24px; display: flex; gap: 40px; background: var(--nuit, #050505); } .ds-reperes a { display: grid; gap: 6px; padding-block: 4px 10px; min-height: 44px; text-decoration: none; color: var(--jour, #f7f5ff); } .ds-reperes a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; } .ds-repere-label { font-family: 'CLG Stencil', 'Arial Narrow', sans-serif; font-weight: 700; font-size: 0.875rem; letter-spacing: 0.14em; text-transform: uppercase; color: #6f86ff; } .ds-repere-num { margin-inline-end: 8px; font-family: 'Albert Sans Variable', 'Helvetica Neue', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; color: var(--e2-nuit, #a9adc4); } .ds-repere-valeur { display: inline-flex; align-items: center; gap: 8px; font-family: 'Albert Sans Variable', 'Helvetica Neue', Arial, sans-serif; font-size: 1rem; border-bottom: 1px solid rgb(247 245 255 / 0.28); padding-bottom: 6px; transition: border-color 0.3s; } .ds-reperes a:hover .ds-repere-valeur { border-color: var(--jour, #f7f5ff); } .ds-fleche { width: 0.8em; height: 0.8em; flex: none; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); } a:hover .ds-fleche { transform: translate(2px, -2px); }"
+    },
+    {
+      "name": "Plan de feux",
+      "kind": "custom",
+      "description": "La stack en mots : termes au pochoir, valeurs en Albert Sans, filets fins sur le cobalt.",
+      "html": "<dl class=\"ds-feux\"><div class=\"ds-feu\"><dt>Tous les jours</dt><dd>TypeScript, Node.js, React, NestJS, Express</dd></div><div class=\"ds-feu\"><dt>Depuis le début</dt><dd>C#, .NET Core, SQL</dd></div><div class=\"ds-feu\"><dt>Mobile</dt><dd>Expo, React Native, Android natif</dd></div></dl>",
+      "css": ".ds-feux { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid rgb(247 245 255 / 0.45); background: var(--cobalt, #0a33ff); color: var(--e-clair, #f7f5ff); padding-inline: 24px; } .ds-feu { padding: 22px 24px 26px 0; border-bottom: 1px solid rgb(247 245 255 / 0.25); } .ds-feu dt { font-family: 'CLG Stencil', 'Arial Narrow', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--e2-cobalt, #d3dbff); margin-bottom: 6px; } .ds-feu dd { margin: 0; font-family: 'Albert Sans Variable', 'Helvetica Neue', Arial, sans-serif; font-size: 1.1875rem; line-height: 1.4; }"
+    },
+    {
+      "name": "Cues du parcours",
+      "kind": "custom",
+      "refersTo": "cue-band",
+      "description": "Quatre bandes pleine largeur, un cran de lumière de plus à chaque cue, de #ff6aae à #ffa3cb.",
+      "html": "<ol class=\"ds-cues\" role=\"list\"><li class=\"ds-cue\" style=\"--cran: #ff6aae\"><p class=\"ds-cue-meta\"><span class=\"ds-cue-num\">LX 3.1</span><span>2022 – 2026</span></p><h3 class=\"ds-maison\">eKonsilio</h3></li><li class=\"ds-cue\" style=\"--cran: #ff7cb7\"><p class=\"ds-cue-meta\"><span class=\"ds-cue-num\">LX 3.2</span><span>2021 – 2022</span></p><h3 class=\"ds-maison\">KS2</h3></li><li class=\"ds-cue\" style=\"--cran: #ff8fc1\"><p class=\"ds-cue-meta\"><span class=\"ds-cue-num\">LX 3.3</span><span>2017 – 2021</span></p><h3 class=\"ds-maison\">Comerso</h3></li><li class=\"ds-cue\" style=\"--cran: #ffa3cb\"><p class=\"ds-cue-meta\"><span class=\"ds-cue-num\">LX 3.4</span><span>2015 – 2017</span></p><h3 class=\"ds-maison\">ILTR</h3></li></ol>",
+      "css": ".ds-cues { list-style: none; margin: 0; padding: 0; color: var(--e-sombre, #0b0d1a); } .ds-cue { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); align-items: baseline; gap: 12px 32px; padding: 32px 24px; background: var(--cran); } .ds-cue-meta { margin: 0; display: grid; gap: 4px; font-family: 'Albert Sans Variable', 'Helvetica Neue', Arial, sans-serif; font-size: 1rem; color: var(--e2-rose, #3a1027); } .ds-cue-num { font-family: 'Albert Sans Variable', 'Helvetica Neue', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; color: var(--e-sombre, #0b0d1a); } .ds-maison { margin: 0; font-family: 'CLG Stencil', 'Arial Narrow', sans-serif; font-weight: 800; font-size: clamp(2.5rem, 7vw, 6rem); line-height: 0.85; text-transform: uppercase; }"
+    },
+    {
+      "name": "Mention de sortie",
+      "kind": "chip",
+      "refersTo": "mention",
+      "description": "Statut d'un projet pas encore publié : étiquette pochoir entre deux filets d'encre.",
+      "html": "<div class=\"ds-aube-m\"><p class=\"ds-mention\">Bêta fermée en cours. Bientôt sur l'App Store et le Play Store.</p></div>",
+      "css": ".ds-aube-m { background: var(--aube, #ffc1d6); padding: 24px; } .ds-mention { margin: 0; padding-block: 12px; font-family: 'CLG Stencil', 'Arial Narrow', sans-serif; font-weight: 700; font-size: 1.0625rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--e-sombre, #0b0d1a); border-block: 1px solid var(--e-sombre, #0b0d1a); }"
+    },
+    {
+      "name": "Horizon des captures",
+      "kind": "card",
+      "description": "Écrans de projet alignés par le bas, debout sur un filet cobalt de 2 px ; angles droits.",
+      "html": "<div class=\"ds-captures\"><div class=\"ds-ecran\"></div><div class=\"ds-ecran ds-ecran-2\"></div></div>",
+      "css": ".ds-captures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: end; padding: 24px 24px 2px; border-bottom: 2px solid var(--cobalt, #0a33ff); background: var(--aube, #ffc1d6); } .ds-ecran { aspect-ratio: 9 / 19.5; background: var(--e-sombre, #0b0d1a); } .ds-ecran-2 { width: 88%; justify-self: start; }"
+    },
+    {
+      "name": "Monogramme sur l'horizon",
+      "kind": "custom",
+      "description": "CLG au pochoir traversé à mi-hauteur par l'horizon : trait cobalt sur clair, #6f86ff sur sombre.",
+      "html": "<div class=\"ds-mono\"><span class=\"ds-mono-nuit\">CLG<i></i></span><span class=\"ds-mono-jour\">CLG<i></i></span></div>",
+      "css": ".ds-mono { display: flex; } .ds-mono > span { position: relative; display: inline-block; padding: 32px 40px; font-family: 'CLG Stencil', 'Arial Narrow', sans-serif; font-weight: 800; font-size: 4rem; line-height: 1; } .ds-mono i { position: absolute; left: 28px; right: 28px; top: 50%; height: 4px; transform: translateY(-50%); } .ds-mono-nuit { background: var(--nuit, #050505); color: var(--jour, #f7f5ff); } .ds-mono-nuit i { background: #6f86ff; } .ds-mono-jour { background: var(--blanc, #fff); color: var(--e-sombre, #0b0d1a); } .ds-mono-jour i { background: var(--cobalt, #0a33ff); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Le cyclorama, de la nuit au jour",
+    "overview": "**Creative North Star: \"Le cyclorama, de la nuit au jour\"**\n\nLa page est un cyclorama de théâtre : un seul fond continu de lumière, découpé en bandes horizontales, que le défilement fait passer de la nuit noire au plein jour. Cinq phases se succèdent dans un ordre fixe (nuit, montée cobalt, rose, aube, plein jour), chacune avec son aplat de lumière et l'encre qui reste lisible dessus. Les projets arrivent quand la lumière est pleine : on monte vers eux.\n\nLe vocabulaire vient de la régie lumière. Les noms et les titres sont au pochoir de plan de feux (CLG Stencil, capitales), les repères sont des numéros de conduite (« 1.1 », « LX 3.2 »), la phase courante s'affiche sur un pupitre de conduite, et la stack se lit comme un plan de feux en filets fins. Le texte courant est en Albert Sans, une sans géométrique claire, à 18 px. Tout est plat : la profondeur vient de la lumière (des aplats et de larges sources décentrées), jamais d'une ombre. Les angles sont droits.\n\nRefus confirmés : le ton consultant et le blanc éditorial (c'est le monde de Cernix, dont rien n'est repris), le cliché développeur (terminal, monospace, néon), le format CV (timeline, barres de compétences, logos en liste).",
+    "keyCharacteristics": [
+      "Un seul fond de lumière en bandes horizontales, toujours de la nuit vers le jour.",
+      "Chaque phase a son aplat et ses deux encres (texte, texte second).",
+      "La lumière vient de larges champs décentrés, jamais d'une lueur de bord ni d'un halo.",
+      "Pochoir pour les noms, titres et étiquettes ; Albert Sans pour tout ce qui se lit.",
+      "Plat, angles droits, aucune ombre.",
+      "Le cobalt est l'horizon : la ligne sur laquelle tout se tient.",
+      "Un seul mouvement écrit : la lumière d'horizon qui se lève puis s'intensifie au défilement."
+    ],
+    "rules": [
+      {
+        "name": "The Rising Light Rule",
+        "body": "Les phases se suivent toujours dans l'ordre nuit, cobalt, rose, aube, jour, et chaque bande est plus claire que la précédente. Une nouvelle section prend sa place dans cette montée ; elle ne revient jamais vers la nuit.",
+        "section": "colors"
+      },
+      {
+        "name": "The Phase Ink Rule",
+        "body": "Une phase = un aplat + une encre + une encre seconde (`--lumiere`, `--encre`, `e2-*`). Un texte prend l'encre de la phase où il se trouve, jamais celle d'une autre.",
+        "section": "colors"
+      },
+      {
+        "name": "The Wide Field Rule",
+        "body": "La lumière se pose en larges champs : un aplat, un fondu vertical, une source radiale décentrée de 55 à 150 % de large. Jamais une lueur de bord, un halo autour d'un objet ou un néon.",
+        "section": "colors"
+      },
+      {
+        "name": "The Cobalt Horizon Rule",
+        "body": "Le cobalt trace l'horizon. Partout où un objet doit se tenir debout (le nom dans la nuit, le monogramme, les écrans de projet), il se tient sur un filet cobalt.",
+        "section": "colors"
+      },
+      {
+        "name": "The Stencil Names Rule",
+        "body": "Le pochoir écrit des noms : le nom, les titres de phase, les maisons, les projets, les étiquettes. Il ne descend jamais dans un paragraphe, une valeur ou un lien de texte.",
+        "section": "typography"
+      },
+      {
+        "name": "The Readable Numeral Rule",
+        "body": "Un chiffre de conduite est en Albert Sans tabulaire, jamais au pochoir : dans CLG Stencil, le 1 se lit comme un I.",
+        "section": "typography"
+      },
+      {
+        "name": "The One-Pixel Overlap Rule",
+        "body": "Chaque phase remonte d'un pixel sur la précédente (`margin-top: -1px`). Une limite tombée sur un demi-pixel laisserait voir la nuit entre deux lumières.",
+        "section": "layout"
+      },
+      {
+        "name": "The Light Not Shadow Rule",
+        "body": "On donne du relief en éclairant, jamais en ombrant. Un objet ressort parce qu'il est posé dans une lumière, pas parce qu'il projette quelque chose.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do placer chaque nouvelle section dans la montée nuit, cobalt, rose, aube, jour, avec son aplat (`--lumiere`), son encre (`--encre`) et la lumière précédente en départ de fondu (`--avant`).",
+      "Do faire remonter chaque phase d'un pixel sur la précédente.",
+      "Do éclairer une phase par une ou deux sources radiales larges et décentrées, en plus de son aplat.",
+      "Do poser ce qui doit se tenir debout sur un filet cobalt de 2 px.",
+      "Do écrire noms, titres et étiquettes au pochoir en capitales, et tout le reste en Albert Sans.",
+      "Do composer les numéros de conduite en Albert Sans 600 tabulaire.",
+      "Do tracer le trait du monogramme en `cobalt` sur fond clair et en `horizon-nuit` sur fond sombre.",
+      "Do garder des angles droits, des filets fins et des cibles tactiles de 44 px.",
+      "Do couper tout mouvement sous `prefers-reduced-motion`.",
+      "Do générer police et fichiers de marque avec `scripts/brand.py`."
+    ],
+    "donts": [
+      "Don't ajouter d'ombre, de flou, de lueur de bord, de halo ou d'effet néon.",
+      "Don't arrondir un angle ; seule l'icône d'application garde son rayon de 16 px.",
+      "Don't écrire un paragraphe ou un chiffre de conduite au pochoir.",
+      "Don't adopter l'allure d'un cabinet de conseil ou d'une page éditoriale blanche.",
+      "Don't utiliser terminal, monospace ou néon pour dire « développeur ».",
+      "Don't présenter le parcours en CV : ni timeline, ni barres de compétences, ni logos en liste.",
+      "Don't reprendre l'identité Cernix : ni strates, ni carotte, ni Archivo, ni Source Serif 4.",
+      "Don't faire revenir la lumière vers la nuit après la première phase."
+    ]
+  }
+}
