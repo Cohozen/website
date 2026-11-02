@@ -1,6 +1,6 @@
 # corentinlegal.dev
 
-Site personnel de Corentin Le Gal. Astro statique, déployé sur Cloudflare Pages.
+Site personnel de Corentin Le Gal. Astro statique, déployé sur Cloudflare Workers.
 
 ```bash
 npm install
@@ -13,25 +13,23 @@ Node 22.23.4 ou plus récent (exigé par Astro 7).
 
 ## Déploiement
 
+Le site est un **Worker** Cloudflare nommé `personal-website`, qui sert les fichiers statiques
+de `dist/` (pas un projet Pages). Sa configuration est dans `wrangler.jsonc`.
+
 ### Automatique
 
-Le projet Cloudflare Pages est relié au dépôt GitHub : chaque push sur `master` part en
-production, chaque autre branche obtient une URL de prévisualisation en `*.pages.dev`.
-Réglages du projet : commande de build `npm run build`, dossier de sortie `dist`.
+Le Worker est relié au dépôt GitHub (Workers Builds) : chaque push sur `master` part en
+production.
 
 ### À la main, en CLI
 
-Avec [Wrangler](https://developers.cloudflare.com/workers/wrangler/), sans passer par GitHub :
-
 ```bash
-npx wrangler login                       # une seule fois, ouvre le navigateur
-npx wrangler pages project list          # retrouver le nom exact du projet
-npm run build
-npx wrangler pages deploy dist --project-name <nom-du-projet> --branch master
+npx wrangler login     # une seule fois, ouvre le navigateur
+npm run deploy         # astro build, puis wrangler deploy
 ```
 
-`--branch master` publie en production ; un autre nom de branche publie une prévisualisation.
-Le build se fait sur ta machine : c'est ta version locale de Node qui compte.
+`npx wrangler deploy --dry-run` vérifie ce qui serait envoyé sans rien publier. Le build se
+fait sur ta machine : c'est ta version locale de Node qui compte.
 
 ## Ajouter un projet au portfolio
 
