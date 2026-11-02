@@ -40,4 +40,4 @@ Un fichier Markdown par projet dans `src/content/projets/` (schéma dans `src/co
 ## Logo et police d'affichage
 
 Générés par `scripts/brand.py` puis `scripts/brand-png.mjs` : voir `brand/README.md`.
-Système visuel : `DESIGN.md`. Contexte produit : `PRODUCT.md`.
+Système visuel : `DESIGN.md`. Contexte produit : `PRODUCT.md`. Consignes pour les agents : `CLAUDE.md`.
