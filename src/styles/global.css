@@ -1,0 +1,127 @@
+@import "@fontsource-variable/albert-sans/wght.css";
+
+/* Big Shoulders Stencil avec un L redessiné (scripts/brand.py), figée en 700 et 800. */
+@font-face {
+    font-family: "CLG Stencil";
+    src: url("/fonts/clg-stencil-800.woff2") format("woff2");
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "CLG Stencil";
+    src: url("/fonts/clg-stencil-700.woff2") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+}
+
+/* Le cyclorama : un seul fond de lumière, de la nuit au plein jour. Chaque phase a sa lumière
+   (--l-*) et l'encre qui reste lisible dessus (--e-*, --e2-* pour le texte second). */
+:root {
+    --nuit: #050505;
+    --sol: #03040c;
+    --cobalt: #0a33ff;
+    --rose: #ff6aae;
+    --aube: #ffc1d6;
+    --jour: #f7f5ff;
+    --blanc: #ffffff;
+
+    --e-clair: #f7f5ff;
+    --e2-nuit: #a9adc4;
+    --e2-cobalt: #d3dbff;
+    --e-sombre: #0b0d1a;
+    --e2-rose: #3a1027;
+    --e2-aube: #4a2234;
+    --e2-jour: #44465a;
+
+    --stencil: "CLG Stencil", "Arial Narrow", sans-serif;
+    --texte: "Albert Sans Variable", "Helvetica Neue", Arial, sans-serif;
+
+    --page: clamp(20px, 5vw, 72px);
+    --fondu: clamp(160px, 22vh, 260px);
+    --largeur: 1280px;
+
+    color-scheme: dark light;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--nuit);
+    scrollbar-color: var(--cobalt) var(--nuit);
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: var(--texte);
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--e-clair);
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: tabular-nums;
+}
+
+::selection {
+    background: var(--cobalt);
+    color: var(--blanc);
+}
+
+a {
+    color: inherit;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+}
+
+:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--stencil);
+    font-weight: 800;
+    line-height: 0.92;
+    text-transform: uppercase;
+    text-wrap: balance;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+    max-width: 62ch;
+    text-wrap: pretty;
+}
+
+.wrap {
+    width: 100%;
+    max-width: var(--largeur);
+    margin-inline: auto;
+    padding-inline: var(--page);
+}
+
+/* Une phase : la lumière de la phase précédente se fond dans la sienne pendant la marge haute,
+   le contenu se pose sur l'aplat. */
+.phase {
+    position: relative;
+    /* Recouvre d'un pixel la phase précédente : une limite à demi-pixel laisserait voir la nuit. */
+    margin-top: -1px;
+    padding-block: calc(var(--fondu) + 24px) clamp(72px, 12vh, 140px);
+    background: linear-gradient(to bottom, var(--avant), var(--lumiere) var(--fondu));
+    color: var(--encre);
+}
+
+.visuellement-cache {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}

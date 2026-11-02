@@ -24,3 +24,17 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Astro
+.astro
+
+# Génération du logo
+.venv-brand
+
+# Outils locaux
+.claude/
+.impeccable/config.local.json
+.impeccable/hook.cache.json
+.impeccable/questions/
+.impeccable/review/
+.impeccable/mocks/

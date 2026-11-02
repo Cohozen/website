@@ -1,0 +1,1001 @@
+---
+import { Image } from "astro:assets";
+import { getCollection, render } from "astro:content";
+import monogramme from "../assets/monogramme.svg?raw";
+import Layout from "../layouts/Layout.astro";
+
+const projets = (await getCollection("projets")).sort((a, b) => a.data.ordre - b.data.ordre);
+const rendus = await Promise.all(
+    projets.map(async (p) => ({ ...p, Contenu: (await render(p)).Content })),
+);
+
+// Ciel de la nuit : positions fixes (générateur pseudo-aléatoire à graine), mêmes à chaque build.
+let graine = 7;
+const hasard = () => {
+    graine = (graine * 16807) % 2147483647;
+    return graine / 2147483647;
+};
+const etoiles = Array.from({ length: 46 }, () => ({
+    x: +(hasard() * 100).toFixed(2),
+    y: +(hasard() * 62).toFixed(2),
+    r: +(0.6 + hasard() * 1.3).toFixed(2),
+    o: +(0.25 + hasard() * 0.6).toFixed(2),
+}));
+
+const liens = [
+    { label: "GitHub", valeur: "Cohozen", href: "https://github.com/Cohozen" },
+    {
+        label: "LinkedIn",
+        valeur: "corentin--le--gal",
+        href: "https://www.linkedin.com/in/corentin--le--gal/",
+    },
+    { label: "Email", valeur: "corentin.legal@proton.me", href: "mailto:corentin.legal@proton.me" },
+];
+
+const stack = [
+    { quand: "Tous les jours", quoi: "TypeScript, Node.js, React, NestJS" },
+    { quand: "Depuis le début", quoi: "C#, .NET Core, SQL" },
+    { quand: "Mobile", quoi: "Expo, React Native, Android natif" },
+    { quand: "Cloud", quoi: "AWS, Azure, Docker, Kubernetes" },
+    { quand: "Données", quoi: "PostgreSQL, MongoDB, SQL Server" },
+    {
+        quand: "En ce moment",
+        quoi: "LLM en production, agents de code, développement guidé par les specs",
+    },
+];
+
+const parcours = [
+    {
+        annees: "2015 – 2017",
+        maison: "ILTR",
+        role: "Analyste développeur",
+        note: "Applications métier pour les collectivités, et la formation de leurs utilisateurs, sur site et au téléphone.",
+    },
+    {
+        annees: "2017 – 2021",
+        maison: "Comerso",
+        role: "Développeur DevOps",
+        note: "Gestion des dons et suivi de la chaîne du froid. Migration d'OVH vers Azure, bibliothèque de composants React pour toute l'équipe, applications Android avec scan et sonde NFC.",
+    },
+    {
+        annees: "2021 – 2022",
+        maison: "KS2",
+        role: "Développeur fullstack",
+        note: "Traitement documentaire par OCR. J'ai remplacé un back-end en briques MVC par une API .NET Core en couches, couverte à plus de 95 % par les tests.",
+    },
+    {
+        annees: "2022 – 2026",
+        maison: "eKonsilio",
+        role: "Lead développeur",
+        note: "Messagerie temps réel entre entreprises et clients, des milliers de conversations par jour. J'ai encadré six à neuf développeurs, divisé par trois le temps de réponse de l'API et migré toute la stack Node.js sans interruption de service.",
+    },
+];
+
+const fleche = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M5.5 3H13v7.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
+const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M3 9l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
+---
+
+<Layout
+    title="Corentin Le Gal, développeur"
+    description="Développeur depuis 2015 : TypeScript, Node.js et .NET, du back-end au mobile. Parcours, stack et projets, dont TryCast."
+>
+    <a class="evitement" href="#contenu">Aller au contenu</a>
+
+    <p class="conduite" aria-hidden="true">
+        <span class="conduite-q">LX 1</span>
+        <span class="conduite-nom">Nuit</span>
+    </p>
+
+    <header class="nuit" data-phase="nuit" data-nom="Nuit">
+        <a class="marque" href="/" aria-label="Corentin Le Gal, accueil" set:html={monogramme} />
+        <svg class="ciel" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            {etoiles.map((e) => <circle cx={e.x} cy={e.y} r={e.r / 10} opacity={e.o} />)}
+        </svg>
+        <div class="lumiere-horizon" aria-hidden="true"></div>
+        <div class="sol" aria-hidden="true"></div>
+
+        <div class="wrap scene">
+            <h1>Corentin Le Gal</h1>
+            <div class="sous-horizon">
+                <p class="qui">
+                    Développeur depuis 2015. TypeScript, Node.js et .NET, du back-end au mobile. Basé
+                    à Angers.
+                </p>
+                <ul class="reperes" role="list">
+                    {
+                        liens.map((l, i) => (
+                            <li>
+                                <a href={l.href} rel={l.href.startsWith("http") ? "me noopener" : undefined}>
+                                    <span class="repere-label">
+                                        <span class="repere-num">1.{i + 1}</span>
+                                        {l.label}
+                                    </span>
+                                    <span class="repere-valeur">
+                                        {l.valeur}
+                                        <Fragment set:html={fleche} />
+                                    </span>
+                                </a>
+                            </li>
+                        ))
+                    }
+                    <li>
+                        <a href="#projets">
+                            <span class="repere-label">
+                                <span class="repere-num">1.4</span>
+                                Projet
+                            </span>
+                            <span class="repere-valeur">
+                                TryCast
+                                <Fragment set:html={descendre} />
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main id="contenu">
+        <section class="phase cobalt" data-phase="cobalt" data-nom="Montée cobalt" aria-labelledby="t-metier">
+            <div class="wrap grille">
+                <h2 id="t-metier">Je construis des logiciels de bout en bout</h2>
+                <div class="metier-texte">
+                    <p class="lead">
+                        Onze ans de code, dont quatre comme lead développeur sur une plateforme SaaS
+                        temps réel à forte volumétrie.
+                    </p>
+                    <p>
+                        J'aime entrer dans une base de code existante, comprendre ses contraintes,
+                        puis la faire avancer sans rien casser : migrations sans interruption,
+                        performances, refontes d'architecture. Et laisser derrière moi une équipe qui
+                        connaît son code mieux qu'à mon arrivée.
+                    </p>
+                </div>
+                <dl class="plan-de-feux">
+                    {
+                        stack.map((s) => (
+                            <div class="feu">
+                                <dt>{s.quand}</dt>
+                                <dd>{s.quoi}</dd>
+                            </div>
+                        ))
+                    }
+                </dl>
+            </div>
+        </section>
+
+        <section class="phase rose" data-phase="rose" data-nom="Rose" aria-labelledby="t-parcours">
+            <div class="wrap">
+                <h2 id="t-parcours">Onze ans, quatre équipes</h2>
+            </div>
+            <ol class="cues" role="list">
+                {
+                    parcours.map((p, i) => (
+                        <li class={`cue cue-${i + 1}`}>
+                            <div class="wrap cue-grille">
+                                <p class="cue-meta">
+                                    <span class="cue-num">LX 3.{i + 1}</span>
+                                    <span>{p.annees}</span>
+                                    <span>{p.role}</span>
+                                </p>
+                                <h3 class="maison">{p.maison}</h3>
+                                <p class="note">{p.note}</p>
+                            </div>
+                            {i === parcours.length - 1 && (
+                                <p class="wrap suite">
+                                    Le détail de chaque poste est sur{" "}
+                                    <a href="https://www.linkedin.com/in/corentin--le--gal/" rel="me noopener">LinkedIn</a>.
+                                </p>
+                            )}
+                        </li>
+                    ))
+                }
+            </ol>
+        </section>
+
+        <section id="projets" class="phase aube" data-phase="aube" data-nom="Aube" aria-labelledby="t-projets">
+            <div class="wrap">
+                <h2 id="t-projets" class="visuellement-cache">Projets</h2>
+                {
+                    rendus.map(({ data, Contenu }) => (
+                        <article class="projet" aria-labelledby={`p-${data.titre}`}>
+                            <div class="projet-texte">
+                                <div class="projet-titre">
+                                    {data.icone && (
+                                        <Image src={data.icone} alt="" width={72} height={72} class="icone" />
+                                    )}
+                                    <h3 id={`p-${data.titre}`}>{data.titre}</h3>
+                                </div>
+                                <p class="accroche">{data.accroche}</p>
+                                <div class="corps">
+                                    <Contenu />
+                                </div>
+                                {data.statut === "bientot" && data.mention && (
+                                    <p class="mention">{data.mention}</p>
+                                )}
+                                {data.statut === "disponible" && (
+                                    <p class="stores">
+                                        {data.appStore && <a href={data.appStore}>App Store</a>}
+                                        {data.playStore && <a href={data.playStore}>Play Store</a>}
+                                    </p>
+                                )}
+                                <p class="projet-stack">{data.stack.join(" · ")}</p>
+                                {data.site && (
+                                    <a class="action" href={data.site}>
+                                        {new URL(data.site).hostname.replace("www.", "")}
+                                        <Fragment set:html={fleche} />
+                                    </a>
+                                )}
+                            </div>
+                            <div class="captures">
+                                {data.captures.map((c, i) => (
+                                    <Image
+                                        src={c.src}
+                                        alt={c.alt}
+                                        widths={[360, 540, 720]}
+                                        sizes="(max-width: 760px) 44vw, 300px"
+                                        class={`capture capture-${i + 1}`}
+                                        loading="lazy"
+                                    />
+                                ))}
+                            </div>
+                        </article>
+                    ))
+                }
+            </div>
+        </section>
+
+        <section class="phase jour" data-phase="jour" data-nom="Plein jour" aria-labelledby="t-cernix">
+            <div class="wrap jour-grille">
+                <h2 id="t-cernix">Une mission&#8239;? C'est chez Cernix</h2>
+                <div class="jour-texte">
+                    <p class="lead">
+                        J'ai fondé Cernix, mon cabinet de conseil indépendant à Angers. J'y interviens
+                        en amont des projets techniques : cadrage, architecture, arbitrages.
+                    </p>
+                    <a class="action action-pleine" href="https://cernix.fr">
+                        cernix.fr
+                        <Fragment set:html={fleche} />
+                    </a>
+                    <p class="reste">
+                        Pour tout le reste :{" "}
+                        <a href="mailto:corentin.legal@proton.me">corentin.legal@proton.me</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pied">
+        <div class="wrap pied-ligne">
+            <span class="pied-marque" set:html={monogramme} />
+            <p>© 2026 Corentin Le Gal · Fondateur de{" "}<a href="https://cernix.fr">Cernix</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Indicateur de conduite : la phase dont la lumière occupe le haut de l'écran.
+        const phases = [...document.querySelectorAll<HTMLElement>("[data-phase]")].filter(
+            (el) => el !== document.documentElement,
+        );
+        const q = document.querySelector(".conduite-q");
+        const nom = document.querySelector(".conduite-nom");
+        let courante = "";
+        const maj = () => {
+            const seuil = 48;
+            let active = phases[0];
+            for (const p of phases) {
+                // Une phase prend la main aux trois cinquièmes de son fondu de lumière.
+                const fondu = p.tagName === "HEADER" ? 0 : Number.parseFloat(getComputedStyle(p).paddingTop) * 0.6;
+                if (p.getBoundingClientRect().top + fondu <= seuil) active = p;
+            }
+            // En bas de page, la dernière phase (courte) n'atteint jamais le seuil.
+            if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) {
+                active = phases[phases.length - 1];
+            }
+            if (active.dataset.phase === courante) return;
+            courante = active.dataset.phase ?? "";
+            document.documentElement.dataset.phase = courante;
+            if (q) q.textContent = `LX ${phases.indexOf(active) + 1}`;
+            if (nom) nom.textContent = active.dataset.nom ?? "";
+        };
+        // Cinq mesures par défilement : pas besoin d'étaler sur requestAnimationFrame.
+        addEventListener("scroll", maj, { passive: true });
+        maj();
+    </script>
+</Layout>
+
+<style>
+    .evitement {
+        position: absolute;
+        left: var(--page);
+        top: -80px;
+        z-index: 20;
+        background: var(--blanc);
+        color: var(--e-sombre);
+        padding: 10px 16px;
+        font-weight: 600;
+    }
+
+    .evitement:focus {
+        top: 16px;
+    }
+
+    /* --- Pupitre de conduite : la phase en cours, sur l'aplat de sa lumière ---------------- */
+    .conduite {
+        position: fixed;
+        z-index: 10;
+        top: 20px;
+        right: var(--page);
+        margin: 0;
+        display: flex;
+        gap: 12px;
+        align-items: baseline;
+        padding: 7px 12px 6px;
+        font-family: var(--stencil);
+        font-weight: 700;
+        font-size: 0.9375rem;
+        line-height: 1;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--e-clair);
+        background: var(--nuit);
+        border: 1px solid rgb(247 245 255 / 0.3);
+        transition:
+            color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+            background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+            border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    :global(html[data-phase="cobalt"]) .conduite {
+        background: var(--cobalt);
+    }
+
+    :global(html[data-phase="rose"]) .conduite,
+    :global(html[data-phase="aube"]) .conduite,
+    :global(html[data-phase="jour"]) .conduite {
+        color: var(--e-sombre);
+        border-color: rgb(11 13 26 / 0.3);
+    }
+
+    :global(html[data-phase="rose"]) .conduite {
+        background: var(--rose);
+    }
+
+    :global(html[data-phase="aube"]) .conduite {
+        background: var(--aube);
+    }
+
+    :global(html[data-phase="jour"]) .conduite {
+        background: var(--jour);
+    }
+
+    /* Les chiffres de conduite en Albert Sans : au pochoir, le 1 se lit comme un I. */
+    .conduite-q,
+    .repere-num,
+    .cue-num {
+        font-family: var(--texte);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .conduite-q {
+        opacity: 0.75;
+    }
+
+    /* Écran large : le pupitre passe en rail vertical dans la marge, hors du texte. */
+    @media (min-width: 1200px) {
+        .conduite {
+            top: 50%;
+            right: clamp(16px, 2vw, 32px);
+            transform: translateY(-50%) rotate(180deg);
+            writing-mode: vertical-rl;
+            padding: 12px 7px;
+        }
+    }
+
+    /* Écran étroit : un bandeau opaque de la couleur de la phase ; le texte passe dessous. */
+    @media (max-width: 1199px) {
+        .conduite {
+            inset: 0 0 auto;
+            justify-content: flex-end;
+            padding: 13px var(--page) 12px;
+            border-width: 0 0 1px;
+        }
+
+        :global(html[data-phase="nuit"]) .conduite {
+            background: transparent;
+            border-color: transparent;
+        }
+    }
+
+    .marque :global(.horizon) {
+        fill: #6f86ff;
+    }
+
+    .pied-marque :global(.horizon) {
+        fill: var(--cobalt);
+    }
+
+    .marque {
+        position: absolute;
+        z-index: 1;
+        top: 18px;
+        left: var(--page);
+        display: block;
+        width: 72px;
+        color: var(--jour);
+    }
+
+    .marque :global(svg),
+    .pied-marque :global(svg) {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    /* --- Nuit : le nom debout sur l'horizon ---------------------------------------------- */
+    .nuit {
+        --horizon: 64%;
+        position: relative;
+        min-height: 100svh;
+        min-height: max(100svh, 640px);
+        background: var(--nuit);
+        overflow: hidden;
+        isolation: isolate;
+    }
+
+    .ciel {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        fill: var(--jour);
+        z-index: -2;
+    }
+
+    .lumiere-horizon {
+        position: absolute;
+        inset: auto 0 calc(100% - var(--horizon));
+        height: 46%;
+        background: linear-gradient(
+            to top,
+            rgb(10 51 255 / 0.95) 0,
+            rgb(10 51 255 / 0.55) 6%,
+            rgb(48 40 170 / 0.28) 40%,
+            rgb(5 5 5 / 0) 100%
+        );
+        z-index: -1;
+        transform-origin: bottom;
+        animation: lever 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .sol {
+        position: absolute;
+        inset: var(--horizon) 0 0;
+        background: linear-gradient(to bottom, #0b1550 0, var(--sol) 3px, var(--nuit) 100%);
+        border-top: 2px solid var(--cobalt);
+        z-index: -1;
+    }
+
+    @keyframes lever {
+        from {
+            opacity: 0.35;
+            transform: scaleY(0.55);
+        }
+    }
+
+    /* Le défilement monte la lumière : l'horizon s'intensifie en quittant la nuit. */
+    @supports (animation-timeline: scroll()) {
+        .lumiere-horizon {
+            animation:
+                lever 1.6s cubic-bezier(0.16, 1, 0.3, 1) both,
+                monter linear both;
+            animation-timeline: auto, scroll(root);
+            animation-range: normal, 0 100svh;
+        }
+
+        @keyframes monter {
+            to {
+                transform: scaleY(1.9);
+                filter: saturate(1.3) brightness(1.25);
+            }
+        }
+    }
+
+    .scene {
+        position: absolute;
+        inset: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    h1 {
+        position: absolute;
+        left: var(--page);
+        right: var(--page);
+        bottom: calc(100% - var(--horizon));
+        font-size: clamp(3.4rem, 12.6vw, 11.5rem);
+        line-height: 0.74;
+        letter-spacing: 0.01em;
+        color: var(--jour);
+    }
+
+    .sous-horizon {
+        position: absolute;
+        top: calc(var(--horizon) + clamp(20px, 3.4vh, 40px));
+        left: var(--page);
+        right: var(--page);
+        display: grid;
+        grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+        gap: 32px clamp(24px, 4vw, 64px);
+        align-items: start;
+    }
+
+    .qui {
+        font-size: clamp(1.125rem, 1.5vw, 1.3125rem);
+        line-height: 1.45;
+        color: var(--e2-nuit);
+        max-width: 34ch;
+    }
+
+    .reperes {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px clamp(28px, 3.4vw, 48px);
+    }
+
+    .reperes a {
+        display: grid;
+        gap: 6px;
+        padding-block: 4px 10px;
+        text-decoration: none;
+        color: var(--jour);
+        min-height: 44px;
+    }
+
+    .repere-label {
+        font-family: var(--stencil);
+        font-weight: 700;
+        font-size: 0.875rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #6f86ff;
+    }
+
+    .repere-num {
+        margin-inline-end: 8px;
+        color: var(--e2-nuit);
+    }
+
+    .repere-valeur {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1rem;
+        border-bottom: 1px solid rgb(247 245 255 / 0.28);
+        padding-bottom: 6px;
+        transition: border-color 0.3s;
+    }
+
+    .reperes a:hover .repere-valeur {
+        border-color: var(--jour);
+    }
+
+    :global(.fleche) {
+        width: 0.8em;
+        height: 0.8em;
+        flex: none;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    a:hover > :global(.fleche),
+    a:hover :global(.fleche) {
+        transform: translate(2px, -2px);
+    }
+
+    /* --- Phases ---------------------------------------------------------------------------- */
+    h2 {
+        font-size: clamp(2.6rem, 6.4vw, 5.75rem);
+        max-width: 14ch;
+    }
+
+    .lead {
+        font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+        line-height: 1.4;
+        font-weight: 500;
+    }
+
+    /* Chaque phase a sa source : une lumière large et décentrée dans l'aplat, jamais un halo. */
+    .cobalt {
+        --avant: var(--nuit);
+        --lumiere: var(--cobalt);
+        --encre: var(--e-clair);
+        background:
+            radial-gradient(75% 90% at 20% 38%, rgb(90 120 255 / 0.42), transparent 70%),
+            radial-gradient(150% 110% at 100% 112%, rgb(122 69 216 / 0.78), transparent 62%),
+            linear-gradient(to bottom, var(--avant), var(--lumiere) var(--fondu));
+    }
+
+    .grille {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 48px clamp(16px, 2.4vw, 32px);
+    }
+
+    .grille h2 {
+        grid-column: 1 / span 7;
+    }
+
+    .metier-texte {
+        grid-column: 8 / -1;
+        display: grid;
+        gap: 20px;
+        align-content: end;
+        color: var(--e2-cobalt);
+    }
+
+    .metier-texte .lead {
+        color: var(--e-clair);
+    }
+
+    .plan-de-feux {
+        grid-column: 1 / -1;
+        margin: 32px 0 0;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-top: 1px solid rgb(247 245 255 / 0.45);
+    }
+
+    .feu {
+        padding: 22px 24px 26px 0;
+        border-bottom: 1px solid rgb(247 245 255 / 0.25);
+    }
+
+    .feu dt {
+        font-family: var(--stencil);
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--e2-cobalt);
+        margin-bottom: 6px;
+    }
+
+    .feu dd {
+        margin: 0;
+        font-size: 1.1875rem;
+        line-height: 1.4;
+    }
+
+    .rose {
+        --encre: var(--e-sombre);
+        padding-bottom: 0;
+        background:
+            radial-gradient(70% 60% at 6% 100%, rgb(255 193 214 / 0.45), transparent 70%),
+            linear-gradient(
+                to bottom,
+                var(--cobalt),
+                #7a45d8 calc(var(--fondu) * 0.5),
+                var(--rose) var(--fondu)
+            );
+    }
+
+    /* Le parcours : quatre cues, chacune un cran de lumière de plus vers l'aube. */
+    .cues {
+        list-style: none;
+        margin: clamp(40px, 6vh, 72px) 0 0;
+        padding: 0;
+    }
+
+    .cue {
+        padding-block: clamp(32px, 5vh, 52px);
+        background: var(--cran);
+    }
+
+    .cue-1 {
+        --cran: #ff6aae;
+    }
+
+    .cue-2 {
+        --cran: #ff7cb7;
+    }
+
+    .cue-3 {
+        --cran: #ff8fc1;
+    }
+
+    .cue-4 {
+        --cran: #ffa3cb;
+    }
+
+    .cue-grille {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 5fr);
+        gap: 12px clamp(16px, 2.4vw, 32px);
+        align-items: center;
+    }
+
+    .cue-meta {
+        display: grid;
+        gap: 4px;
+        font-size: 1rem;
+        color: var(--e2-rose);
+    }
+
+    .cue-num {
+        font-size: 1.0625rem;
+        color: var(--e-sombre);
+    }
+
+    .maison {
+        font-size: clamp(3rem, 7vw, 6rem);
+        line-height: 0.85;
+    }
+
+    .note {
+        color: var(--e2-rose);
+    }
+
+    .suite {
+        padding-top: clamp(32px, 5vh, 52px);
+        color: var(--e2-rose);
+    }
+
+    .aube {
+        --avant: #ffa3cb;
+        background:
+            radial-gradient(55% 60% at 74% 62%, rgb(255 255 255 / 0.6), transparent 70%),
+            linear-gradient(to bottom, var(--avant), var(--lumiere) var(--fondu));
+        --lumiere: var(--aube);
+        --encre: var(--e-sombre);
+    }
+
+    .projet {
+        display: grid;
+        grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+        gap: 48px clamp(24px, 5vw, 80px);
+        align-items: center;
+    }
+
+    .projet-texte {
+        display: grid;
+        gap: 20px;
+        align-content: start;
+    }
+
+    .projet-titre {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .icone {
+        width: 72px;
+        height: 72px;
+        border-radius: 16px;
+    }
+
+    .projet h3 {
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        line-height: 0.8;
+    }
+
+    .accroche {
+        font-size: clamp(1.375rem, 2vw, 1.75rem);
+        font-weight: 600;
+        line-height: 1.25;
+    }
+
+    .corps {
+        color: var(--e2-aube);
+    }
+
+    .mention {
+        font-family: var(--stencil);
+        font-weight: 700;
+        font-size: 1.0625rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding-block: 12px;
+        border-block: 1px solid var(--e-sombre);
+        max-width: none;
+    }
+
+    .projet-stack {
+        font-size: 1rem;
+        color: var(--e2-aube);
+    }
+
+    .action {
+        justify-self: start;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 48px;
+        padding: 0 22px;
+        border: 1.5px solid currentColor;
+        font-weight: 600;
+        text-decoration: none;
+        transition:
+            background-color 0.25s,
+            color 0.25s;
+    }
+
+    .action:hover {
+        background: var(--e-sombre);
+        color: var(--aube);
+    }
+
+    /* Les écrans se tiennent sur un horizon, comme les silhouettes sur le cyclorama. */
+    .captures {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(12px, 2vw, 28px);
+        align-items: end;
+        padding-bottom: 2px;
+        border-bottom: 2px solid var(--cobalt);
+    }
+
+    .capture {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .capture-2 {
+        width: 88%;
+        justify-self: start;
+    }
+
+    .jour {
+        --avant: var(--aube);
+        --lumiere: var(--jour);
+        --encre: var(--e-sombre);
+        background: linear-gradient(
+            to bottom,
+            var(--aube),
+            var(--jour) var(--fondu),
+            var(--blanc)
+        );
+    }
+
+    .jour-grille {
+        display: grid;
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        gap: 40px clamp(24px, 5vw, 80px);
+        align-items: end;
+    }
+
+    .jour-texte {
+        display: grid;
+        gap: 24px;
+    }
+
+    .action-pleine {
+        background: var(--e-sombre);
+        color: var(--jour);
+        border-color: var(--e-sombre);
+    }
+
+    .action-pleine:hover {
+        background: var(--cobalt);
+        border-color: var(--cobalt);
+        color: var(--blanc);
+    }
+
+    .reste {
+        color: var(--e2-jour);
+    }
+
+    .pied {
+        background: var(--blanc);
+        color: var(--e2-jour);
+        padding-block: 0 40px;
+        font-size: 1rem;
+    }
+
+    .pied-ligne {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px 20px;
+        border-top: 1px solid rgb(11 13 26 / 0.18);
+        padding-top: 28px;
+    }
+
+    .pied-marque {
+        width: 40px;
+        color: var(--e-sombre);
+    }
+
+    /* --- Tailles moyennes et mobile ------------------------------------------------------ */
+    @media (max-width: 1023px) {
+        .sous-horizon {
+            grid-template-columns: 1fr;
+        }
+
+        .reperes {
+            justify-content: start;
+            grid-template-columns: repeat(2, minmax(0, max-content));
+            gap: 4px 32px;
+        }
+
+        .grille h2,
+        .metier-texte {
+            grid-column: 1 / -1;
+        }
+
+        .plan-de-feux {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .cue-grille {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+        }
+
+        .note {
+            grid-column: 2 / -1;
+        }
+
+        .projet,
+        .jour-grille {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .nuit {
+            --horizon: 46%;
+        }
+
+        /* Le nom passe sur deux lignes : plus grand, et des lignes qui ne se touchent pas. */
+        h1 {
+            font-size: min(21vw, 6.5rem);
+            line-height: 0.86;
+        }
+
+        .marque {
+            width: 44px;
+        }
+
+        .plan-de-feux {
+            grid-template-columns: 1fr;
+        }
+
+        .cue-grille {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .maison {
+            order: -1;
+        }
+
+        .note {
+            grid-column: auto;
+        }
+
+        .reperes {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .lumiere-horizon {
+            animation: none !important;
+        }
+
+        .conduite,
+        :global(.fleche),
+        .action {
+            transition: none;
+        }
+    }
+</style>
