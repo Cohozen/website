@@ -9,9 +9,7 @@ web
 ## Stack
 
 Astro statique, déployé sur Cloudflare Pages, Biome pour le lint et le format (même socle que
-le site Cernix et le site TryCast). Domaine conservé : corentinlegal.dev. Analytics Plausible
-auto-hébergé conservé (`plausible.corentinlegal.fr`, domaine `corentinlegal.dev`). Refonte
-complète : l'actuel Vite + React + styled-components est abandonné.
+le site Cernix et le site TryCast). Domaine : corentinlegal.dev. Pas d'analytics.
 
 ## Users
 
@@ -67,8 +65,6 @@ mission, avec la mention « fondateur de Cernix ».
 - Nom affiché : Corentin Le Gal. Activité : développeur (le dossier dit « Lead Tech »,
   « développeur JS/TS senior »).
 - Voix : première personne, directe, concrète, sans jargon marketing.
-- L'identité visuelle actuelle (bleu nuit, Amatic SC, étoiles et OVNI) n'est pas un
-  engagement : elle est remplacée.
 - Ne pas reprendre l'identité Cernix (carte géologique, strates colorées, Archivo / Source
   Serif 4, carotte) : le site perso doit se reconnaître comme un autre objet.
 
