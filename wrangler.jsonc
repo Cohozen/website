@@ -1,0 +1,9 @@
+// Worker Cloudflare du site : il sert uniquement les fichiers statiques produits par `astro build`.
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "personal-website",
+    "compatibility_date": "2026-11-02",
+    "assets": {
+        "directory": "./dist"
+    }
+}
