@@ -341,18 +341,28 @@
       },
       {
         "name": "lever",
-        "value": "2.8s cubic-bezier(0.16, 1, 0.3, 1) both; from opacity 0, scaleY(0.2)",
+        "value": "GSAP 3.2s expo.out ; nappe from opacity 0, scaleY 0.15",
         "purpose": "Au chargement, la lumière cobalt au-dessus de l'horizon de la nuit se lève."
       },
       {
         "name": "poursuite",
-        "value": "allumer 3s 0.8s ease-out both (from opacity 0) ; traverser 70s linear infinite (from translate -50% 0)",
+        "value": "GSAP : opacity 0 → 1 en 3s après 0.8s ; xPercent -50 → 0 en 70s, ease none, repeat -1",
         "purpose": "Après le lever, une poursuite traverse l'horizon de la nuit de gauche à droite, sans fin et sans variation d'intensité."
       },
       {
+        "name": "ciel",
+        "value": "canvas, 120 étoiles, rotation antihoraire de 0.006 rad/s autour du pôle (50 %, 35 % du ciel), apparition 2.5s",
+        "purpose": "Les étoiles tournent autour du pôle, comme une nuit en pose longue."
+      },
+      {
+        "name": "lenis",
+        "value": "Lenis 1.3, autoRaf false, branché sur gsap.ticker ; absent sous prefers-reduced-motion",
+        "purpose": "Défilement lissé à la molette, au rythme des animations."
+      },
+      {
         "name": "monter",
-        "value": "linear both; animation-timeline: scroll(root); animation-range: 0 100svh; to scaleY(1.9) saturate(1.3) brightness(1.25)",
-        "purpose": "Au défilement, l'horizon s'intensifie en quittant la nuit (sous @supports animation-timeline). La poursuite s'ouvre en même temps (ouvrir : scale 1.6 1.3)."
+        "value": "GSAP ScrollTrigger sur la nuit (top top → bottom top), scrub 1 : scaleY 1.8, saturate(1.3) brightness(1.25) ; poursuite scale 1.6 1.3 ; ciel +0.5 rad",
+        "purpose": "Au défilement, l'horizon s'intensifie, la poursuite s'ouvre et le ciel tourne plus vite en quittant la nuit."
       },
       {
         "name": "conduite",
@@ -471,7 +481,7 @@
       "Pochoir pour les noms, titres et étiquettes ; Albert Sans pour tout ce qui se lit.",
       "Plat, angles droits, aucune ombre.",
       "Le cobalt est l'horizon : la ligne sur laquelle tout se tient.",
-      "Deux mouvements écrits : la lumière d'horizon (elle se lève, une poursuite la traverse, le défilement l'intensifie) et le fader de la console, qui suit le défilement."
+      "Deux mouvements écrits : la nuit (la lumière d'horizon se lève, une poursuite la traverse, le ciel tourne, le défilement accentue tout) et le fader de la console, qui suit le défilement et le pilote."
     ],
     "rules": [
       {
