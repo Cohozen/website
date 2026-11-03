@@ -9,19 +9,6 @@ const rendus = await Promise.all(
     projets.map(async (p) => ({ ...p, Contenu: (await render(p)).Content })),
 );
 
-// Ciel de la nuit : positions fixes (générateur pseudo-aléatoire à graine), mêmes à chaque build.
-let graine = 7;
-const hasard = () => {
-    graine = (graine * 16807) % 2147483647;
-    return graine / 2147483647;
-};
-const etoiles = Array.from({ length: 46 }, () => ({
-    x: +(hasard() * 100).toFixed(2),
-    y: +(hasard() * 62).toFixed(2),
-    r: +(0.6 + hasard() * 1.3).toFixed(2),
-    o: +(0.25 + hasard() * 0.6).toFixed(2),
-}));
-
 const liens = [
     { label: "GitHub", valeur: "Cohozen", href: "https://github.com/Cohozen" },
     {
@@ -103,16 +90,18 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         >
             {graduations.map((p) => <span class="fader-trait" style={`--p: ${p}`} />)}
             <ol class="fader-cues" aria-hidden="true"></ol>
+            <span class="fader-visee" aria-hidden="true"></span>
             <span class="fader-bouton" aria-hidden="true"></span>
         </div>
     </div>
 
     <header class="nuit" data-phase="nuit" data-nom="Nuit">
         <a class="marque" href="/" aria-label="Corentin Le Gal, accueil" set:html={monogramme} />
-        <svg class="ciel" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            {etoiles.map((e) => <circle cx={e.x} cy={e.y} r={e.r / 10} opacity={e.o} />)}
-        </svg>
-        <div class="lumiere-horizon" aria-hidden="true"></div>
+        <canvas class="ciel" aria-hidden="true"></canvas>
+        <div class="lumiere-horizon" aria-hidden="true">
+            <div class="nappe"></div>
+            <div class="poursuite"></div>
+        </div>
         <div class="sol" aria-hidden="true"></div>
 
         <div class="wrap scene">
@@ -295,27 +284,150 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
     </footer>
 
     <script>
-        // Console : le pupitre affiche la phase dont la lumière occupe le haut de l'écran, le
-        // fader suit le défilement et le pilote.
+        import { gsap } from "gsap";
+        import { ScrollTrigger } from "gsap/ScrollTrigger";
+        import Lenis from "lenis";
+        import "lenis/dist/lenis.css";
+
+        gsap.registerPlugin(ScrollTrigger);
+
         const racine = document.documentElement;
+        const calme = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const borner = (n: number) => Math.min(1, Math.max(0, n));
+
+        // --- Défilement : Lenis lisse la molette au rythme de GSAP. Sous prefers-reduced-motion,
+        // le défilement reste natif et rien ne s'anime.
+        const lenis = calme ? null : new Lenis({ autoRaf: false, anchors: true });
+        if (lenis) {
+            lenis.on("scroll", ScrollTrigger.update);
+            gsap.ticker.add((t) => lenis.raf(t * 1000));
+            gsap.ticker.lagSmoothing(0);
+        }
+        const defiler = (y: number, options: { duration?: number; lerp?: number } = {}) => {
+            if (lenis) lenis.scrollTo(y, options);
+            else scrollTo({ top: y, behavior: "instant" });
+        };
+
+        // --- Ciel : les étoiles tournent autour du pôle, comme une nuit en pose longue.
+        const nuit = document.querySelector<HTMLElement>(".nuit");
+        const ciel = document.querySelector<HTMLCanvasElement>(".ciel");
+        const sol = document.querySelector<HTMLElement>(".sol");
+        const pinceau = ciel?.getContext("2d");
+        let graine = 7;
+        const hasard = () => {
+            graine = (graine * 16807) % 2147483647;
+            return graine / 2147483647;
+        };
+        // Réparties uniformément sur le disque du ciel, aux mêmes places à chaque visite.
+        const etoiles = Array.from({ length: 120 }, () => ({
+            r: Math.sqrt(hasard()),
+            a: hasard() * Math.PI * 2,
+            taille: 0.6 + hasard() * 1.1,
+            eclat: 0.25 + hasard() * 0.6,
+        }));
+        // temps et defilement en radians ; eclat fait apparaître le ciel au chargement.
+        const rotation = { temps: 0, defilement: 0, eclat: calme ? 1 : 0 };
+        const pole = { x: 0, y: 0 };
+        let rayon = 0;
+        let horizon = 0;
+        let dpr = 1;
+
+        const dessiner = () => {
+            if (!ciel || !pinceau) return;
+            pinceau.setTransform(dpr, 0, 0, dpr, 0, 0);
+            pinceau.clearRect(0, 0, ciel.width, ciel.height);
+            pinceau.fillStyle = "#f7f5ff";
+            // Sens antihoraire, comme le ciel du nord.
+            const tour = -(rotation.temps + rotation.defilement);
+            for (const e of etoiles) {
+                const x = pole.x + Math.cos(e.a + tour) * e.r * rayon;
+                const y = pole.y + Math.sin(e.a + tour) * e.r * rayon;
+                if (y > horizon) continue;
+                pinceau.globalAlpha = e.eclat * rotation.eclat;
+                pinceau.beginPath();
+                pinceau.arc(x, y, e.taille, 0, Math.PI * 2);
+                pinceau.fill();
+            }
+        };
+
+        const dimensionner = () => {
+            if (!nuit || !ciel || !sol) return;
+            dpr = Math.min(devicePixelRatio, 2);
+            const { width, height } = nuit.getBoundingClientRect();
+            ciel.width = width * dpr;
+            ciel.height = height * dpr;
+            horizon = sol.offsetTop;
+            // Le pôle est haut dans le ciel, au-dessus du nom. Le disque couvre tout le ciel
+            // visible, quel que soit l'angle.
+            pole.x = width * 0.5;
+            pole.y = horizon * 0.35;
+            rayon = Math.hypot(Math.max(pole.x, width - pole.x), Math.max(pole.y, horizon - pole.y));
+            dessiner();
+        };
+        if (nuit) new ResizeObserver(dimensionner).observe(nuit);
+
+        // --- Lever de la nuit : la nappe se lève, la poursuite s'allume puis traverse
+        // l'horizon sans fin, les étoiles apparaissent et tournent. Le défilement accentue tout.
+        if (!calme && nuit) {
+            gsap.set([".lumiere-horizon", ".nappe", ".poursuite"], { transformOrigin: "50% 100%" });
+            gsap.timeline()
+                .fromTo(".nappe", { opacity: 0, scaleY: 0.15 }, { opacity: 1, scaleY: 1, duration: 3.2, ease: "expo.out" })
+                .fromTo(".poursuite", { opacity: 0 }, { opacity: 1, duration: 3, ease: "power1.inOut" }, 0.8)
+                .to(rotation, { eclat: 1, duration: 2.5, ease: "power1.inOut" }, 0.4)
+                .fromTo(".console", { autoAlpha: 0, x: 24 }, { autoAlpha: 1, x: 0, duration: 1.2, ease: "expo.out" }, 1);
+            gsap.fromTo(".poursuite", { xPercent: -50 }, { xPercent: 0, duration: 70, ease: "none", repeat: -1 });
+
+            const montee = { trigger: nuit, start: "top top", end: "bottom top", scrub: 1 };
+            gsap.to(".lumiere-horizon", {
+                scaleY: 1.8,
+                filter: "saturate(1.3) brightness(1.25)",
+                ease: "none",
+                scrollTrigger: montee,
+            });
+            gsap.to(".poursuite", { scaleX: 1.6, scaleY: 1.3, ease: "none", scrollTrigger: montee });
+            gsap.to(rotation, { defilement: 0.5, ease: "none", scrollTrigger: montee });
+
+            // Un tour en un quart d'heure environ ; on ne dessine que si la nuit est à l'écran.
+            let visible = true;
+            ScrollTrigger.create({
+                trigger: nuit,
+                start: "top bottom",
+                end: "bottom top",
+                onToggle: (st) => {
+                    visible = st.isActive;
+                },
+            });
+            gsap.ticker.add((_, dt) => {
+                if (!visible) return;
+                rotation.temps += (dt / 1000) * 0.006;
+                dessiner();
+            });
+        }
+
+        // --- Console : le pupitre affiche la phase dont la lumière occupe le haut de l'écran,
+        // le fader suit le défilement et le pilote.
         const phases = [...document.querySelectorAll<HTMLElement>("[data-phase]")].filter((el) => el !== racine);
         const q = document.querySelector(".conduite-q");
         const nom = document.querySelector(".conduite-nom");
         const fader = document.querySelector<HTMLElement>(".fader");
         const bouton = document.querySelector<HTMLElement>(".fader-bouton");
-        const cues = phases.map((_, i) => {
-            const li = document.createElement("li");
-            li.textContent = `LX ${i + 1}`;
-            return li;
-        });
-        document.querySelector(".fader-cues")?.append(...cues);
 
         let course = 1;
         let prises: number[] = [];
         let courante = -1;
 
+        // Une cue par phase ; un clic y amène la page.
+        const cues = phases.map((_, i) => {
+            const li = document.createElement("li");
+            li.textContent = `LX ${i + 1}`;
+            // Un pixel après la prise : Lenis arrondit et s'arrêterait juste avant la phase.
+            li.addEventListener("click", () => defiler(Math.min(prises[i] + 1, course), { duration: 1.6 }));
+            return li;
+        });
+        document.querySelector(".fader-cues")?.append(...cues);
+
         const maj = () => {
-            const p = Math.min(1, scrollY / course);
+            const p = borner(scrollY / course);
             fader?.style.setProperty("--p", String(p));
             fader?.setAttribute("aria-valuenow", String(Math.round(p * 100)));
             const i = Math.max(0, prises.findLastIndex((prise) => scrollY >= prise));
@@ -342,23 +454,31 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             maj();
         };
 
-        // Un clic ou un glisser sur le fader amène la page à ce niveau de la course.
-        const viser = (e: PointerEvent) => {
-            if (!fader || !bouton) return;
+        // Le fader : un clic sur la course y amène la page, le bouton se saisit et se glisse.
+        let ecart = 0;
+        const niveau = (clientY: number) => {
+            if (!fader || !bouton) return 0;
             const r = fader.getBoundingClientRect();
             const demi = bouton.offsetHeight / 2;
-            const p = (e.clientY - r.top - demi) / (r.height - 2 * demi);
-            scrollTo({ top: Math.min(1, Math.max(0, p)) * course, behavior: "instant" });
+            return borner((clientY - ecart - r.top - demi) / (r.height - 2 * demi)) * course;
         };
         fader?.addEventListener("pointerdown", (e) => {
+            if (e.button !== 0 || (e.target as Element).closest("li")) return;
+            const surBouton = e.target === bouton;
+            const centre = bouton ? bouton.getBoundingClientRect().top + bouton.offsetHeight / 2 : 0;
+            ecart = surBouton ? e.clientY - centre : 0;
             fader.setPointerCapture(e.pointerId);
-            viser(e);
+            fader.classList.add("tenu");
+            if (!surBouton) defiler(niveau(e.clientY), { duration: 0.9 });
         });
         fader?.addEventListener("pointermove", (e) => {
-            if (fader.hasPointerCapture(e.pointerId)) viser(e);
+            fader.style.setProperty("--y", `${e.clientY - fader.getBoundingClientRect().top}px`);
+            if (fader.hasPointerCapture(e.pointerId)) defiler(niveau(e.clientY), { lerp: 0.25 });
         });
+        const lacher = () => fader?.classList.remove("tenu");
+        fader?.addEventListener("pointerup", lacher);
+        fader?.addEventListener("pointercancel", lacher);
 
-        // Le défilement ne fait que comparer des nombres : pas besoin de requestAnimationFrame.
         addEventListener("scroll", maj, { passive: true });
         // Polices, images et redimensionnement changent la hauteur des phases.
         new ResizeObserver(mesurer).observe(document.body);
@@ -381,60 +501,10 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         top: 16px;
     }
 
-    /* --- Console : le pupitre de conduite et le fader, à la lumière de la phase en cours --- */
+    /* --- Console : le pupitre de conduite et le fader, à la lumière de la phase en cours ---
+       Seulement sur grand écran avec une souris : ailleurs, la barre native suffit. */
     .console {
-        display: contents;
-        --c-fond: var(--nuit);
-        --c-encre: var(--e-clair);
-        --c-filet: rgb(247 245 255 / 0.3);
-    }
-
-    :global(html[data-phase="cobalt"]) .console {
-        --c-fond: var(--cobalt);
-    }
-
-    :global(html[data-phase="rose"]) .console,
-    :global(html[data-phase="aube"]) .console,
-    :global(html[data-phase="jour"]) .console {
-        --c-encre: var(--e-sombre);
-        --c-filet: rgb(11 13 26 / 0.3);
-    }
-
-    :global(html[data-phase="rose"]) .console {
-        --c-fond: var(--rose);
-    }
-
-    :global(html[data-phase="aube"]) .console {
-        --c-fond: var(--aube);
-    }
-
-    :global(html[data-phase="jour"]) .console {
-        --c-fond: var(--jour);
-    }
-
-    .conduite {
-        position: fixed;
-        z-index: 10;
-        top: 20px;
-        right: var(--page);
-        margin: 0;
-        display: flex;
-        gap: 12px;
-        align-items: baseline;
-        padding: 7px 12px 6px;
-        font-family: var(--stencil);
-        font-weight: 700;
-        font-size: 0.9375rem;
-        line-height: 1;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--c-encre);
-        background: var(--c-fond);
-        border: 1px solid var(--c-filet);
-        transition:
-            color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-            background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-            border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        display: none;
     }
 
     /* Les chiffres de conduite en Albert Sans : au pochoir, le 1 se lit comme un I. */
@@ -448,33 +518,17 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         font-variant-numeric: tabular-nums;
     }
 
-    .conduite-q {
-        opacity: 0.75;
-    }
-
-    .fader {
-        display: none;
-    }
-
-    /* Écran large : le pupitre passe en rail vertical dans la marge, hors du texte. */
-    @media (min-width: 1200px) {
-        .conduite {
-            top: 50%;
-            right: clamp(16px, 2vw, 32px);
-            transform: translateY(-50%) rotate(180deg);
-            writing-mode: vertical-rl;
-            padding: 12px 7px;
-        }
-    }
-
-    /* Écran large avec souris : la console occupe la marge droite, le pupitre en haut et le
-       fader dessous, qui remplace la barre de défilement. */
     @media (min-width: 1200px) and (pointer: fine) {
         :global(html) {
             scrollbar-width: none;
         }
 
         .console {
+            --c-fond: var(--nuit);
+            --c-encre: var(--e-clair);
+            --c-filet: rgb(247 245 255 / 0.3);
+            --axe: 18px;
+            --demi: 20px;
             position: fixed;
             z-index: 10;
             top: 20px;
@@ -485,27 +539,71 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             flex-direction: column;
             align-items: flex-end;
             gap: 20px;
-            --axe: 18px;
-            --demi: 16px;
+            color: var(--c-encre);
+            transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        :global(html[data-phase="cobalt"]) .console {
+            --c-fond: var(--cobalt);
+        }
+
+        :global(html[data-phase="rose"]) .console,
+        :global(html[data-phase="aube"]) .console,
+        :global(html[data-phase="jour"]) .console {
+            --c-encre: var(--e-sombre);
+            --c-filet: rgb(11 13 26 / 0.3);
+        }
+
+        :global(html[data-phase="rose"]) .console {
+            --c-fond: var(--rose);
+        }
+
+        :global(html[data-phase="aube"]) .console {
+            --c-fond: var(--aube);
+        }
+
+        :global(html[data-phase="jour"]) .console {
+            --c-fond: var(--jour);
+        }
+
+        /* Le pupitre, au-dessus de la course. Sa hauteur est fixe (celle de « LX 2 Montée
+           cobalt ») : le fader ne bouge pas quand le nom de la phase change. */
         .conduite {
-            position: static;
-            align-self: flex-end;
-            margin-right: calc(var(--axe) - 15px);
+            flex: none;
+            margin: 0 calc(var(--axe) - 15px) 0 0;
+            display: flex;
+            gap: 12px;
+            align-items: baseline;
+            inline-size: 12.6em;
+            padding: 12px 7px;
+            writing-mode: vertical-rl;
             transform: rotate(180deg);
+            font-family: var(--stencil);
+            font-weight: 700;
+            font-size: 0.9375rem;
+            line-height: 1;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--c-encre);
+            background: var(--c-fond);
+            border: 1px solid var(--c-filet);
+            transition:
+                color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .conduite-q {
+            opacity: 0.75;
         }
 
         .fader {
-            display: block;
             position: relative;
             flex: 1;
             width: 100%;
-            color: var(--c-encre);
-            cursor: ns-resize;
+            cursor: crosshair;
             touch-action: none;
             user-select: none;
-            transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* La fente du fader. */
@@ -517,6 +615,7 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             width: 2px;
             background: currentColor;
             opacity: 0.35;
+            transition: opacity 0.3s;
         }
 
         .fader-trait,
@@ -532,13 +631,14 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             width: 10px;
             height: 1px;
             background: currentColor;
-            opacity: 0.45;
+            opacity: 0.4;
+            transition: opacity 0.3s;
         }
 
         .fader-trait:nth-child(5n + 1) {
             right: calc(var(--axe) - 8px);
             width: 16px;
-            opacity: 0.8;
+            opacity: 0.75;
         }
 
         .fader-cues {
@@ -552,23 +652,60 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             white-space: nowrap;
         }
 
+        /* Chaque cue est un lien vers sa phase : une main au survol, une zone de clic large. */
         .fader-cues :global(li) {
-            right: calc(var(--axe) + 13px);
+            right: calc(var(--axe) + 9px);
+            padding: 8px 4px;
             opacity: 0.5;
-            transition: opacity 0.5s;
+            cursor: pointer;
+            transition:
+                opacity 0.3s,
+                translate 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .fader-cues :global(li.active) {
+        .fader-cues :global(li.active),
+        .fader-cues :global(li:hover) {
             opacity: 1;
         }
 
-        /* Le bouton du fader : un plot à l'encre de la phase, barré de sa lumière. */
+        .fader-cues :global(li:hover) {
+            translate: -3px -50%;
+        }
+
+        /* La visée : au survol, le niveau où un clic amènerait la page. */
+        .fader-visee {
+            position: absolute;
+            top: var(--y, 0);
+            left: 0;
+            right: calc(var(--axe) - 10px);
+            height: 1px;
+            background: currentColor;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        /* Le bouton : un plot à l'encre de la phase, strié pour la prise, barré de sa lumière. */
         .fader-bouton {
-            right: calc(var(--axe) - 11px);
-            width: 22px;
+            right: calc(var(--axe) - 13px);
+            width: 26px;
             height: calc(2 * var(--demi));
             background: var(--c-encre);
-            transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: grab;
+            transition:
+                background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                scale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fader-bouton::before {
+            content: "";
+            position: absolute;
+            inset: 6px 5px;
+            background: repeating-linear-gradient(
+                to bottom,
+                color-mix(in srgb, var(--c-fond) 45%, transparent) 0 1px,
+                transparent 1px 4px
+            );
         }
 
         .fader-bouton::after {
@@ -579,20 +716,39 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             translate: 0 -50%;
             background: var(--c-fond);
         }
-    }
 
-    /* Écran étroit : un bandeau opaque de la couleur de la phase ; le texte passe dessous. */
-    @media (max-width: 1199px) {
-        .conduite {
-            inset: 0 0 auto;
-            justify-content: flex-end;
-            padding: 13px var(--page) 12px;
-            border-width: 0 0 1px;
+        .fader:hover::before {
+            opacity: 0.6;
         }
 
-        :global(html[data-phase="nuit"]) .conduite {
-            background: transparent;
-            border-color: transparent;
+        .fader:hover .fader-trait {
+            opacity: 0.7;
+        }
+
+        .fader:hover .fader-trait:nth-child(5n + 1) {
+            opacity: 1;
+        }
+
+        .fader:hover .fader-visee {
+            opacity: 0.5;
+        }
+
+        .fader-bouton:hover {
+            scale: 1.08;
+        }
+
+        /* En main : le plot s'élargit, la visée s'efface, la main se ferme. */
+        .fader.tenu,
+        .fader.tenu .fader-bouton {
+            cursor: grabbing;
+        }
+
+        .fader.tenu .fader-bouton {
+            scale: 1.18 1.06;
+        }
+
+        .fader.tenu .fader-visee {
+            opacity: 0;
         }
     }
 
@@ -624,19 +780,33 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         isolation: isolate;
     }
 
+    /* Le ciel tourne autour de son pôle, dessiné dans un canvas (voir le script). */
     .ciel {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        fill: var(--jour);
         z-index: -2;
     }
 
+    /* La lumière d'horizon : une nappe qui se lève et une poursuite qui la traverse. GSAP les
+       anime (voir le script) ; sans JS ou sous prefers-reduced-motion, elles restent fixes. */
     .lumiere-horizon {
         position: absolute;
         inset: auto 0 calc(100% - var(--horizon));
-        height: 46%;
+        height: 58%;
+        z-index: -1;
+        transform-origin: bottom;
+    }
+
+    .nappe,
+    .poursuite {
+        position: absolute;
+        inset: 0;
+        transform-origin: bottom;
+    }
+
+    .nappe {
         background: linear-gradient(
             to top,
             rgb(10 51 255 / 0.95) 0,
@@ -644,35 +814,23 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             rgb(48 40 170 / 0.28) 40%,
             rgb(5 5 5 / 0) 100%
         );
-        z-index: -1;
-        transform-origin: bottom;
-        animation: lever 2.8s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
-    /* Une poursuite traverse l'horizon de gauche à droite, sans jamais revenir ni respirer :
-       deux sources sur une bande deux fois plus large que l'écran, qui glisse d'une source. */
-    .lumiere-horizon::before {
-        content: "";
-        position: absolute;
-        inset: 0 auto 0 0;
+    /* Deux sources sur une bande deux fois plus large que l'écran, qui glisse d'une source :
+       la poursuite traverse l'horizon sans jamais revenir ni respirer. */
+    .poursuite {
+        right: auto;
         width: 200%;
         background: radial-gradient(42% 100% at 50% 100%, rgb(70 105 255 / 0.5), transparent 72%) 0 0 /
             50% 100% repeat-x;
-        transform-origin: bottom;
-        animation:
-            allumer 3s 0.8s ease-out both,
-            traverser 70s linear infinite;
     }
 
-    @keyframes allumer {
-        from {
+    /* Avant que GSAP ne lève la lumière : rien n'est encore allumé. */
+    @media (prefers-reduced-motion: no-preference) {
+        :global(.js) .nappe,
+        :global(.js) .poursuite,
+        :global(.js) .console {
             opacity: 0;
-        }
-    }
-
-    @keyframes traverser {
-        from {
-            translate: -50% 0;
         }
     }
 
@@ -682,47 +840,6 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         background: linear-gradient(to bottom, #0b1550 0, var(--sol) 3px, var(--nuit) 100%);
         border-top: 2px solid var(--cobalt);
         z-index: -1;
-    }
-
-    @keyframes lever {
-        from {
-            opacity: 0;
-            transform: scaleY(0.2);
-        }
-    }
-
-    /* Le défilement monte la lumière : l'horizon s'intensifie et la poursuite s'élargit en
-       quittant la nuit. */
-    @supports (animation-timeline: scroll()) {
-        .lumiere-horizon {
-            animation:
-                lever 2.8s cubic-bezier(0.16, 1, 0.3, 1) both,
-                monter linear both;
-            animation-timeline: auto, scroll(root);
-            animation-range: normal, 0 100svh;
-        }
-
-        .lumiere-horizon::before {
-            animation:
-                allumer 3s 0.8s ease-out both,
-                traverser 70s linear infinite,
-                ouvrir linear both;
-            animation-timeline: auto, auto, scroll(root);
-            animation-range: normal, normal, 0 100svh;
-        }
-
-        @keyframes monter {
-            to {
-                transform: scaleY(1.9);
-                filter: saturate(1.3) brightness(1.25);
-            }
-        }
-
-        @keyframes ouvrir {
-            to {
-                scale: 1.6 1.3;
-            }
-        }
     }
 
     .scene {
@@ -1209,14 +1326,12 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .lumiere-horizon,
-        .lumiere-horizon::before {
-            animation: none !important;
-        }
-
+        .console,
         .conduite,
-        .fader,
+        .fader::before,
+        .fader-trait,
         .fader-cues :global(li),
+        .fader-visee,
         .fader-bouton,
         :global(.fleche),
         .action {
