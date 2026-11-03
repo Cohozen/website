@@ -71,6 +71,9 @@ const parcours = [
     },
 ];
 
+// Échelle du fader : un trait tous les 5 %, un trait long tous les 25 %.
+const graduations = Array.from({ length: 21 }, (_, i) => i / 20);
+
 const fleche = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M5.5 3H13v7.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
 const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M3 9l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
 ---
@@ -81,10 +84,28 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
 >
     <a class="evitement" href="#contenu">Aller au contenu</a>
 
-    <p class="conduite" aria-hidden="true">
-        <span class="conduite-q">LX 1</span>
-        <span class="conduite-nom">Nuit</span>
-    </p>
+    <div class="console">
+        <p class="conduite" aria-hidden="true">
+            <span class="conduite-q">LX 1</span>
+            <span class="conduite-nom">Nuit</span>
+        </p>
+        <!-- Le fader de la console remplace la barre de défilement : la course va de la nuit
+             (en haut) au plein jour (en bas), chaque phase est une cue sur la course. -->
+        <div
+            class="fader"
+            role="scrollbar"
+            aria-controls="contenu"
+            aria-orientation="vertical"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+            aria-label="Position dans la page"
+        >
+            {graduations.map((p) => <span class="fader-trait" style={`--p: ${p}`} />)}
+            <ol class="fader-cues" aria-hidden="true"></ol>
+            <span class="fader-bouton" aria-hidden="true"></span>
+        </div>
+    </div>
 
     <header class="nuit" data-phase="nuit" data-nom="Nuit">
         <a class="marque" href="/" aria-label="Corentin Le Gal, accueil" set:html={monogramme} />
@@ -274,34 +295,73 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
     </footer>
 
     <script>
-        // Indicateur de conduite : la phase dont la lumière occupe le haut de l'écran.
-        const phases = [...document.querySelectorAll<HTMLElement>("[data-phase]")].filter(
-            (el) => el !== document.documentElement,
-        );
+        // Console : le pupitre affiche la phase dont la lumière occupe le haut de l'écran, le
+        // fader suit le défilement et le pilote.
+        const racine = document.documentElement;
+        const phases = [...document.querySelectorAll<HTMLElement>("[data-phase]")].filter((el) => el !== racine);
         const q = document.querySelector(".conduite-q");
         const nom = document.querySelector(".conduite-nom");
-        let courante = "";
+        const fader = document.querySelector<HTMLElement>(".fader");
+        const bouton = document.querySelector<HTMLElement>(".fader-bouton");
+        const cues = phases.map((_, i) => {
+            const li = document.createElement("li");
+            li.textContent = `LX ${i + 1}`;
+            return li;
+        });
+        document.querySelector(".fader-cues")?.append(...cues);
+
+        let course = 1;
+        let prises: number[] = [];
+        let courante = -1;
+
         const maj = () => {
-            const seuil = 48;
-            let active = phases[0];
-            for (const p of phases) {
-                // Une phase prend la main aux trois cinquièmes de son fondu de lumière.
-                const fondu = p.tagName === "HEADER" ? 0 : Number.parseFloat(getComputedStyle(p).paddingTop) * 0.6;
-                if (p.getBoundingClientRect().top + fondu <= seuil) active = p;
-            }
-            // En bas de page, la dernière phase (courte) n'atteint jamais le seuil.
-            if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) {
-                active = phases[phases.length - 1];
-            }
-            if (active.dataset.phase === courante) return;
-            courante = active.dataset.phase ?? "";
-            document.documentElement.dataset.phase = courante;
-            if (q) q.textContent = `LX ${phases.indexOf(active) + 1}`;
-            if (nom) nom.textContent = active.dataset.nom ?? "";
+            const p = Math.min(1, scrollY / course);
+            fader?.style.setProperty("--p", String(p));
+            fader?.setAttribute("aria-valuenow", String(Math.round(p * 100)));
+            const i = Math.max(0, prises.findLastIndex((prise) => scrollY >= prise));
+            if (i === courante) return;
+            courante = i;
+            racine.dataset.phase = phases[i].dataset.phase;
+            if (q) q.textContent = `LX ${i + 1}`;
+            if (nom) nom.textContent = phases[i].dataset.nom ?? "";
+            cues.forEach((li, j) => li.classList.toggle("active", j === i));
         };
-        // Cinq mesures par défilement : pas besoin d'étaler sur requestAnimationFrame.
+
+        // Où chaque phase prend la main : quand les trois cinquièmes de son fondu de lumière ont
+        // passé le haut de l'écran. Sa cue se pose au même endroit sur la course du fader.
+        const mesurer = () => {
+            course = Math.max(1, racine.scrollHeight - innerHeight);
+            prises = phases.map((p) => {
+                const fondu = p.tagName === "HEADER" ? 0 : Number.parseFloat(getComputedStyle(p).paddingTop) * 0.6;
+                const prise = p.getBoundingClientRect().top + scrollY + fondu - 48;
+                // En bas de page, la dernière phase (courte) n'atteint jamais le seuil.
+                return Math.max(0, Math.min(prise, course - 2));
+            });
+            cues.forEach((li, i) => li.style.setProperty("--p", String(prises[i] / course)));
+            courante = -1;
+            maj();
+        };
+
+        // Un clic ou un glisser sur le fader amène la page à ce niveau de la course.
+        const viser = (e: PointerEvent) => {
+            if (!fader || !bouton) return;
+            const r = fader.getBoundingClientRect();
+            const demi = bouton.offsetHeight / 2;
+            const p = (e.clientY - r.top - demi) / (r.height - 2 * demi);
+            scrollTo({ top: Math.min(1, Math.max(0, p)) * course, behavior: "instant" });
+        };
+        fader?.addEventListener("pointerdown", (e) => {
+            fader.setPointerCapture(e.pointerId);
+            viser(e);
+        });
+        fader?.addEventListener("pointermove", (e) => {
+            if (fader.hasPointerCapture(e.pointerId)) viser(e);
+        });
+
+        // Le défilement ne fait que comparer des nombres : pas besoin de requestAnimationFrame.
         addEventListener("scroll", maj, { passive: true });
-        maj();
+        // Polices, images et redimensionnement changent la hauteur des phases.
+        new ResizeObserver(mesurer).observe(document.body);
     </script>
 </Layout>
 
@@ -321,7 +381,37 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         top: 16px;
     }
 
-    /* --- Pupitre de conduite : la phase en cours, sur l'aplat de sa lumière ---------------- */
+    /* --- Console : le pupitre de conduite et le fader, à la lumière de la phase en cours --- */
+    .console {
+        display: contents;
+        --c-fond: var(--nuit);
+        --c-encre: var(--e-clair);
+        --c-filet: rgb(247 245 255 / 0.3);
+    }
+
+    :global(html[data-phase="cobalt"]) .console {
+        --c-fond: var(--cobalt);
+    }
+
+    :global(html[data-phase="rose"]) .console,
+    :global(html[data-phase="aube"]) .console,
+    :global(html[data-phase="jour"]) .console {
+        --c-encre: var(--e-sombre);
+        --c-filet: rgb(11 13 26 / 0.3);
+    }
+
+    :global(html[data-phase="rose"]) .console {
+        --c-fond: var(--rose);
+    }
+
+    :global(html[data-phase="aube"]) .console {
+        --c-fond: var(--aube);
+    }
+
+    :global(html[data-phase="jour"]) .console {
+        --c-fond: var(--jour);
+    }
+
     .conduite {
         position: fixed;
         z-index: 10;
@@ -338,42 +428,20 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         line-height: 1;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--e-clair);
-        background: var(--nuit);
-        border: 1px solid rgb(247 245 255 / 0.3);
+        color: var(--c-encre);
+        background: var(--c-fond);
+        border: 1px solid var(--c-filet);
         transition:
             color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
             background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
             border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    :global(html[data-phase="cobalt"]) .conduite {
-        background: var(--cobalt);
-    }
-
-    :global(html[data-phase="rose"]) .conduite,
-    :global(html[data-phase="aube"]) .conduite,
-    :global(html[data-phase="jour"]) .conduite {
-        color: var(--e-sombre);
-        border-color: rgb(11 13 26 / 0.3);
-    }
-
-    :global(html[data-phase="rose"]) .conduite {
-        background: var(--rose);
-    }
-
-    :global(html[data-phase="aube"]) .conduite {
-        background: var(--aube);
-    }
-
-    :global(html[data-phase="jour"]) .conduite {
-        background: var(--jour);
-    }
-
     /* Les chiffres de conduite en Albert Sans : au pochoir, le 1 se lit comme un I. */
     .conduite-q,
     .repere-num,
-    .cue-num {
+    .cue-num,
+    .fader-cues {
         font-family: var(--texte);
         font-weight: 600;
         letter-spacing: 0.02em;
@@ -384,6 +452,10 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         opacity: 0.75;
     }
 
+    .fader {
+        display: none;
+    }
+
     /* Écran large : le pupitre passe en rail vertical dans la marge, hors du texte. */
     @media (min-width: 1200px) {
         .conduite {
@@ -392,6 +464,120 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             transform: translateY(-50%) rotate(180deg);
             writing-mode: vertical-rl;
             padding: 12px 7px;
+        }
+    }
+
+    /* Écran large avec souris : la console occupe la marge droite, le pupitre en haut et le
+       fader dessous, qui remplace la barre de défilement. */
+    @media (min-width: 1200px) and (pointer: fine) {
+        :global(html) {
+            scrollbar-width: none;
+        }
+
+        .console {
+            position: fixed;
+            z-index: 10;
+            top: 20px;
+            bottom: 20px;
+            right: clamp(4px, calc(var(--page) - 60px), 24px);
+            width: 56px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 20px;
+            --axe: 18px;
+            --demi: 16px;
+        }
+
+        .conduite {
+            position: static;
+            align-self: flex-end;
+            margin-right: calc(var(--axe) - 15px);
+            transform: rotate(180deg);
+        }
+
+        .fader {
+            display: block;
+            position: relative;
+            flex: 1;
+            width: 100%;
+            color: var(--c-encre);
+            cursor: ns-resize;
+            touch-action: none;
+            user-select: none;
+            transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* La fente du fader. */
+        .fader::before {
+            content: "";
+            position: absolute;
+            inset: var(--demi) auto;
+            right: calc(var(--axe) - 1px);
+            width: 2px;
+            background: currentColor;
+            opacity: 0.35;
+        }
+
+        .fader-trait,
+        .fader-cues :global(li),
+        .fader-bouton {
+            position: absolute;
+            top: calc(var(--demi) + var(--p) * (100% - 2 * var(--demi)));
+            translate: 0 -50%;
+        }
+
+        .fader-trait {
+            right: calc(var(--axe) - 5px);
+            width: 10px;
+            height: 1px;
+            background: currentColor;
+            opacity: 0.45;
+        }
+
+        .fader-trait:nth-child(5n + 1) {
+            right: calc(var(--axe) - 8px);
+            width: 16px;
+            opacity: 0.8;
+        }
+
+        .fader-cues {
+            position: absolute;
+            inset: 0;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 0.75rem;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .fader-cues :global(li) {
+            right: calc(var(--axe) + 13px);
+            opacity: 0.5;
+            transition: opacity 0.5s;
+        }
+
+        .fader-cues :global(li.active) {
+            opacity: 1;
+        }
+
+        /* Le bouton du fader : un plot à l'encre de la phase, barré de sa lumière. */
+        .fader-bouton {
+            right: calc(var(--axe) - 11px);
+            width: 22px;
+            height: calc(2 * var(--demi));
+            background: var(--c-encre);
+            transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fader-bouton::after {
+            content: "";
+            position: absolute;
+            inset: 50% 0 auto;
+            height: 2px;
+            translate: 0 -50%;
+            background: var(--c-fond);
         }
     }
 
@@ -409,7 +595,6 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             border-color: transparent;
         }
     }
-
 
     .marque {
         position: absolute;
@@ -1030,6 +1215,9 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         }
 
         .conduite,
+        .fader,
+        .fader-cues :global(li),
+        .fader-bouton,
         :global(.fleche),
         .action {
             transition: none;
