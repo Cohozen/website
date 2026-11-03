@@ -156,14 +156,14 @@ Refus confirmés : le ton consultant et le blanc éditorial (c'est le monde de C
 - Pochoir pour les noms, titres et étiquettes ; Albert Sans pour tout ce qui se lit.
 - Plat, angles droits, aucune ombre.
 - Le cobalt est l'horizon : la ligne sur laquelle tout se tient.
-- Un seul mouvement écrit : la lumière d'horizon qui se lève puis s'intensifie au défilement.
+- Deux mouvements écrits : la lumière d'horizon (elle se lève, une poursuite la traverse, le défilement l'intensifie) et le fader de la console, qui suit le défilement.
 
 ## Colors
 
 Une suite de lumières de scène, de la plus sombre à la plus claire, chacune doublée de ses encres. Toutes les valeurs sont des propriétés personnalisées sur `:root` dans `src/styles/global.css` (sauf `horizon-nuit`, `violet-transition` et la rampe des cues, écrites en littéral dans la page) ; `scripts/brand.py` reprend les mêmes valeurs pour le logo.
 
 ### Primary
-- **Cobalt d'horizon** (`cobalt`) : la ligne d'horizon. Filet de 2 px au sol de la nuit, filet sous les captures de projet, ciel de l'avatar sous le monogramme, aplat de la phase « Montée cobalt », fond du pupitre dans cette phase, survol du bouton plein, sélection de texte, barre de défilement.
+- **Cobalt d'horizon** (`cobalt`) : la ligne d'horizon. Filet de 2 px au sol de la nuit, filet sous les captures de projet, ciel de l'avatar sous le monogramme, aplat de la phase « Montée cobalt », fond du pupitre dans cette phase, survol du bouton plein, sélection de texte, barre de défilement native (là où le fader ne la remplace pas).
 - **Cobalt de nuit** (`horizon-nuit`) : le même cobalt éclairci pour rester lisible sur le noir. Étiquettes des repères de la nuit.
 
 ### Secondary
@@ -238,7 +238,7 @@ Le système est plat : aucune `box-shadow`, aucun flou. La profondeur est celle 
 
 ## Shapes
 
-Angles droits partout (`rounded.none`) : boutons, pupitre, bandes, captures. La seule exception est l'icône d'application (`rounded.app-icon`, 16 px) : c'est la forme réelle du produit, pas un choix du site. Les contours sont des filets fins (1 px pour les repères, le plan de feux, la mention, le pied ; 1,5 px pour le bouton à filet). Le seul trait épais est l'horizon cobalt, à 2 px.
+Angles droits partout (`rounded.none`) : boutons, pupitre, bouton du fader, bandes, captures. La seule exception est l'icône d'application (`rounded.app-icon`, 16 px) : c'est la forme réelle du produit, pas un choix du site. Les contours sont des filets fins (1 px pour les repères, le plan de feux, la mention, le pied ; 1,5 px pour le bouton à filet). Le seul trait épais est l'horizon cobalt, à 2 px.
 
 Les flèches sont des SVG tracés à 1,6 px : oblique pour un lien sortant, verticale pour descendre dans la page.
 
@@ -251,8 +251,10 @@ Des actions de régie, nettes et sans couleur propre.
 - **Plein (`action-pleine`) :** fond `e-sombre`, texte `jour`. Au survol, fond et filet `cobalt`, texte `blanc` : l'action prend la couleur de l'horizon.
 - **Hover / Focus:** couleurs en 0,25 s ; la flèche avance de 2 px en diagonale (0,3 s `cubic-bezier(0.16, 1, 0.3, 1)`). Focus global : contour de 2 px à l'encre courante, décalé de 4 px.
 
-### Pupitre de conduite (signature)
-L'indicateur de la phase courante, fixe, en étiquette pochoir : le numéro de conduite (« LX 1 » à « LX 5 », en cue numeral à 75 % d'opacité) puis le nom de la phase. Il prend l'aplat et l'encre de la phase dont la lumière occupe le haut de l'écran, avec un filet de 1 px à 30 % de son encre ; le changement de couleur dure 0,5 s. À partir de 1200 px, c'est un rail vertical dans la marge droite, centré en hauteur, hors du texte. En dessous, c'est un bandeau opaque pleine largeur en haut de l'écran, aligné à droite, filet en bas ; le texte défile dessous. Dans la nuit, le bandeau est transparent. Il est masqué aux lecteurs d'écran (`aria-hidden`).
+### Console de conduite (signature)
+**Pupitre.** L'indicateur de la phase courante, fixe, en étiquette pochoir : le numéro de conduite (« LX 1 » à « LX 5 », en cue numeral à 75 % d'opacité) puis le nom de la phase. Il prend l'aplat et l'encre de la phase dont la lumière occupe le haut de l'écran, avec un filet de 1 px à 30 % de son encre ; le changement de couleur dure 0,5 s. Il est masqué aux lecteurs d'écran (`aria-hidden`). Sous 1200 px, c'est un bandeau opaque pleine largeur en haut de l'écran, aligné à droite, filet en bas ; le texte défile dessous. Dans la nuit, le bandeau est transparent. À partir de 1200 px sur écran tactile, c'est un rail vertical dans la marge droite, centré en hauteur.
+
+**Fader.** À partir de 1200 px avec une souris, la console occupe la marge droite (56 px, de 20 px du haut à 20 px du bas) : le pupitre vertical en haut, puis le fader, qui remplace la barre de défilement native (`scrollbar-width: none`). La course va de la nuit (en haut) au plein jour (en bas). Une fente de 2 px à 35 % de l'encre, un trait tous les 5 % (10 px, 45 %) et un trait long tous les 25 % (16 px, 80 %). Les cinq phases sont des cues sur la course, « LX 1 » à « LX 5 » en cue numeral 12 px à gauche de la fente, posées là où leur lumière prend la main : celle de la phase courante à pleine encre, les autres à 50 %. Le bouton est un plot de 22 × 32 px à l'encre de la phase, barré en son milieu d'un filet de 2 px de sa lumière. Un clic ou un glisser sur le fader amène la page à ce niveau ; le clavier défile comme d'habitude. Le fader porte `role="scrollbar"` et `aria-valuenow` (0 à 100).
 
 ### Repères de conduite
 Les liens de la nuit (GitHub, LinkedIn, email, puis le projet en cours) : une étiquette pochoir en `horizon-nuit` précédée de son numéro (« 1.1 » à « 1.4 », en `e2-nuit`), puis la valeur en Albert Sans 16 px, `jour`, soulignée d'un filet de 1 px à 28 % qui passe à `jour` au survol (0,3 s).
@@ -270,7 +272,7 @@ Texte sur 5 colonnes, captures sur 7. Le titre se tient à côté de l'icône de
 CLG au pochoir 800, vectorisé, sans trait ni coupe ajoutés. Seul, il suit l'encre (`currentColor`) : marque d'en-tête et de pied de page, symbole une encre. Dans l'avatar et le favicon, il se tient debout sur l'horizon : ciel nuit puis cobalt au-dessus de sa ligne de base, nuit en dessous. Dans la version longue, le nom suit sur la même ligne de base. Tout fichier de marque est généré par `scripts/brand.py`, jamais retouché à la main.
 
 ### Horizon de la nuit (mouvement)
-Le seul mouvement écrit de la page. Au chargement, la lumière cobalt au-dessus de l'horizon se lève : de 55 à 100 % de sa hauteur et de 35 à 100 % d'opacité, en 1,6 s `cubic-bezier(0.16, 1, 0.3, 1)`. Au défilement (là où `animation-timeline: scroll()` existe), elle s'intensifie sur la première hauteur d'écran jusqu'à 190 % de hauteur, saturation 1,3 et luminosité 1,25. Sous `prefers-reduced-motion`, rien ne bouge : la lumière est fixe et les transitions du pupitre, des flèches et des boutons sont coupées.
+Au chargement, la lumière cobalt au-dessus de l'horizon se lève : de 20 à 100 % de sa hauteur et de 0 à 100 % d'opacité, en 2,8 s `cubic-bezier(0.16, 1, 0.3, 1)`. Une poursuite s'allume ensuite (3 s, après 0,8 s) et traverse l'horizon de gauche à droite en 70 s, sans fin : deux sources radiales larges (42 % × 100 %, `rgb(70 105 255 / 0.5)`) sur une bande deux fois plus large que l'écran, qui glisse d'une source. La lumière se déplace, elle ne respire jamais : aucune variation d'intensité en boucle. Au défilement (là où `animation-timeline: scroll()` existe), sur la première hauteur d'écran, l'horizon s'intensifie jusqu'à 190 % de hauteur, saturation 1,3 et luminosité 1,25, et la poursuite s'ouvre (×1,6 en largeur, ×1,3 en hauteur). Sous `prefers-reduced-motion`, rien ne bouge : la lumière est fixe et les transitions de la console, des flèches et des boutons sont coupées.
 
 ## Do's and Don'ts
 
@@ -284,6 +286,7 @@ Le seul mouvement écrit de la page. Au chargement, la lumière cobalt au-dessus
 - **Do** poser le monogramme debout sur l'horizon de lumière dans l'avatar, et le laisser seul ailleurs.
 - **Do** garder des angles droits, des filets fins et des cibles tactiles de 44 px.
 - **Do** couper tout mouvement sous `prefers-reduced-motion`.
+- **Do** faire bouger la lumière en la déplaçant, jamais en la faisant respirer.
 - **Do** générer police et fichiers de marque avec `scripts/brand.py`.
 
 ### Don't:

@@ -341,18 +341,23 @@
       },
       {
         "name": "lever",
-        "value": "1.6s cubic-bezier(0.16, 1, 0.3, 1) both; from opacity 0.35, scaleY(0.55)",
+        "value": "2.8s cubic-bezier(0.16, 1, 0.3, 1) both; from opacity 0, scaleY(0.2)",
         "purpose": "Au chargement, la lumière cobalt au-dessus de l'horizon de la nuit se lève."
+      },
+      {
+        "name": "poursuite",
+        "value": "allumer 3s 0.8s ease-out both (from opacity 0) ; traverser 70s linear infinite (from translate -50% 0)",
+        "purpose": "Après le lever, une poursuite traverse l'horizon de la nuit de gauche à droite, sans fin et sans variation d'intensité."
       },
       {
         "name": "monter",
         "value": "linear both; animation-timeline: scroll(root); animation-range: 0 100svh; to scaleY(1.9) saturate(1.3) brightness(1.25)",
-        "purpose": "Au défilement, l'horizon s'intensifie en quittant la nuit (sous @supports animation-timeline)."
+        "purpose": "Au défilement, l'horizon s'intensifie en quittant la nuit (sous @supports animation-timeline). La poursuite s'ouvre en même temps (ouvrir : scale 1.6 1.3)."
       },
       {
         "name": "conduite",
         "value": "0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Couleur, fond et filet du pupitre quand la phase change."
+        "purpose": "Couleur, fond et filet du pupitre, encre du fader et de son bouton quand la phase change."
       },
       {
         "name": "fleche",
@@ -367,7 +372,7 @@
       {
         "name": "reduced-motion",
         "value": "prefers-reduced-motion: reduce",
-        "purpose": "Aucune animation de l'horizon ; transitions du pupitre, des flèches et des boutons coupées."
+        "purpose": "Aucune animation de l'horizon ni de la poursuite ; transitions de la console, des flèches et des boutons coupées."
       }
     ],
     "breakpoints": [
@@ -466,7 +471,7 @@
       "Pochoir pour les noms, titres et étiquettes ; Albert Sans pour tout ce qui se lit.",
       "Plat, angles droits, aucune ombre.",
       "Le cobalt est l'horizon : la ligne sur laquelle tout se tient.",
-      "Un seul mouvement écrit : la lumière d'horizon qui se lève puis s'intensifie au défilement."
+      "Deux mouvements écrits : la lumière d'horizon (elle se lève, une poursuite la traverse, le défilement l'intensifie) et le fader de la console, qui suit le défilement."
     ],
     "rules": [
       {
