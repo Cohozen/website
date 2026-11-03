@@ -220,7 +220,7 @@ CLG Stencil est générée par `scripts/brand.py` et auto-hébergée dans `publi
 
 ## Layout
 
-Un conteneur de 1280 px au plus (`container`), marges latérales `page`, et une pile verticale de phases pleine largeur. Chaque phase s'ouvre sur un fondu : pendant `fondu` (160 à 260 px), la lumière de la phase précédente (`--avant`) se fond dans la sienne (`--lumiere`), puis le contenu se pose sur l'aplat, 24 px plus bas ; elle se ferme sur `phase-end`. Le parcours supprime ce bas : ses cues vont jusqu'au bord et passent la main à l'aube.
+Un conteneur de 1280 px au plus (`container`), marges latérales `page`, et une pile verticale de phases pleine largeur. Chaque phase s'ouvre sur un fondu : pendant `fondu` (160 à 260 px), la lumière de la phase précédente (`--avant`) se fond dans la sienne (`--lumiere`), puis le contenu se pose sur l'aplat, 24 px plus bas ; elle se ferme sur `phase-end`. Au cobalt, la nuit se retire en courbe douce (smoothstep) et couvre aussi les sources radiales : la lumière commence sans arête. Le parcours supprime ce bas : ses cues vont jusqu'au bord et passent la main à l'aube.
 
 La nuit occupe au moins tout l'écran (`max(100svh, 640px)`). Son horizon est à 64 % de la hauteur (46 % sous 640 px) : le nom repose dessus, la présentation et les repères commencent juste dessous, sur une grille 4/8. Le monogramme est en haut à gauche (72 px, 44 px sous 640 px). Les phases suivantes utilisent des grilles asymétriques : 12 colonnes pour le métier (titre sur 7, texte sur les 5 dernières, plan de feux sur toute la largeur en 3 colonnes), 3/4/5 pour une cue, 5/7 pour un projet, 7/5 pour le plein jour. La gouttière horizontale est `gutter` ou monte jusqu'à 64 à 80 px entre texte et image.
 
@@ -231,7 +231,7 @@ Réponses observées : sous 1024 px, la nuit, le métier, les projets et le plei
 
 ## Elevation & Depth
 
-Le système est plat : aucune `box-shadow`, aucun flou. La profondeur est celle d'une scène éclairée : des aplats qui se succèdent, des fondus verticaux entre phases, et une ou deux sources radiales larges et décentrées par phase (une lumière bleue haute à gauche et une violette basse à droite sur le cobalt, une rose basse à gauche sur le rose, une blanche à droite sur l'aube). La nuit a son propre plan : un ciel étoilé qui tourne autour de son pôle, l'horizon, le sol.
+Le système est plat : aucune `box-shadow`, aucun flou, sauf le voile du fader (voir la console). La profondeur est celle d'une scène éclairée : des aplats qui se succèdent, des fondus verticaux entre phases, et une ou deux sources radiales larges et décentrées par phase (une lumière bleue haute à gauche et une violette basse à droite sur le cobalt, une rose basse à gauche sur le rose, une blanche à droite sur l'aube). La nuit a son propre plan : un ciel étoilé qui tourne autour de son pôle, l'horizon, le sol.
 
 ### Named Rules
 **The Light Not Shadow Rule.** On donne du relief en éclairant, jamais en ombrant. Un objet ressort parce qu'il est posé dans une lumière, pas parce qu'il projette quelque chose.
@@ -252,17 +252,17 @@ Des actions de régie, nettes et sans couleur propre.
 - **Hover / Focus:** couleurs en 0,25 s ; la flèche avance de 2 px en diagonale (0,3 s `cubic-bezier(0.16, 1, 0.3, 1)`). Focus global : contour de 2 px à l'encre courante, décalé de 4 px.
 
 ### Console de conduite (signature)
-La console n'existe qu'à partir de 1200 px avec une souris ; ailleurs, la page garde sa barre de défilement native et aucun indicateur de phase. Elle occupe la marge droite (56 px, de 20 px du haut à 20 px du bas) et entre en glissant de 24 px vers la gauche au chargement (1,2 s, après 1 s). Elle est masquée aux lecteurs d'écran, sauf le fader (`role="scrollbar"`, `aria-valuenow` de 0 à 100).
+La console n'existe qu'à partir de 1200 px avec une souris ; ailleurs, la page garde sa barre de défilement native et aucun indicateur de phase. Elle occupe la marge droite (64 px, de 20 px du haut à 20 px du bas) et entre en glissant de 24 px vers la gauche au chargement (1,2 s, après 1 s). Elle est masquée aux lecteurs d'écran, sauf le fader (`role="scrollbar"`, `aria-valuenow` de 0 à 100).
 
-**Pupitre.** En haut, en rail vertical : le numéro de conduite (« LX 1 » à « LX 5 », en cue numeral à 75 % d'opacité) puis le nom de la phase, en étiquette pochoir. Il prend l'aplat et l'encre de la phase dont la lumière occupe le haut de l'écran, avec un filet de 1 px à 30 % de son encre ; le changement de couleur dure 0,5 s. Sa hauteur est fixe (celle de « LX 2 Montée cobalt ») : le fader ne bouge jamais quand le nom change.
+**Pupitre.** En haut, en rail vertical : le seul numéro de conduite (« LX 1 » à « LX 5 », en cue numeral), sans nom de phase. Il prend l'aplat et l'encre de la phase dont la lumière occupe le haut de l'écran, avec un filet de 1 px à 30 % de son encre ; le changement de couleur dure 0,5 s. Quand la phase change, le numéro roule dans sa fenêtre pendant que la couleur passe : l'ancien sort dans le sens du défilement (0,2 s), le nouveau entre derrière lui (0,5 s `expo.out`).
 
-**Fader.** Dessous, il remplace la barre de défilement native (`scrollbar-width: none`). La course va de la nuit (en haut) au plein jour (en bas). Une fente de 2 px à 35 % de l'encre, un trait tous les 5 % (10 px, 40 %) et un trait long tous les 25 % (16 px, 75 %). Les cinq phases sont des cues sur la course, « LX 1 » à « LX 5 » en cue numeral 12 px à gauche de la fente, posées là où leur lumière prend la main : celle de la phase courante à pleine encre, les autres à 50 %.
+**Fader.** Dessous, il remplace la barre de défilement native (`scrollbar-width: none`). La course va de la nuit (en haut) au plein jour (en bas). Une fente de 2 px à 35 % de l'encre, un trait tous les 5 % (10 px, 40 %) et un trait long tous les 25 % (16 px, 75 %). Les cinq phases sont des cues sur la course, « LX 1 » à « LX 5 » en cue numeral 12 px, à 12 px à gauche de la fente, posées là où leur lumière prend la main : celle de la phase courante à pleine encre, les autres à 50 %.
 
 **Bouton.** Un plot de 26 × 40 px à l'encre de la phase, strié de filets de sa lumière à 45 % pour la prise, barré en son milieu d'un filet de 2 px de sa lumière.
 
 **Interactions.**
-- Course : pointeur en croix ; au survol, la fente et les traits s'éclairent et une visée (filet de 1 px à 50 %) montre le niveau où un clic amènerait la page. Un clic y conduit la page en 0,9 s.
-- Cues : une main au survol, la cue avance de 3 px et passe à pleine encre ; un clic amène la page au début de sa phase en 1,6 s.
+- Course : pointeur en croix. Au survol, un voile se pose derrière le fader (aplat de la phase à 45 %, flou de 10 px, fondu vers la gauche) pour le détacher de la page, la fente et les traits s'éclairent, et une visée (filet de 1 px à 50 %, bornée à la course du bouton) montre le niveau où un clic amènerait la page. Un clic y conduit la page en 0,9 s.
+- Cues : une main au survol, la cue avance de 4 px (par sa marge intérieure : sa zone de clic ne bouge pas) et passe à pleine encre ; la visée s'efface. Un clic amène la page au début de sa phase en 1,6 s.
 - Bouton : une main ouverte, il grossit de 8 % au survol ; saisi, la main se ferme, il s'élargit (×1,18 × 1,06), la visée s'efface et la page suit le glisser.
 
 ### Repères de conduite
@@ -283,10 +283,10 @@ CLG au pochoir 800, vectorisé, sans trait ni coupe ajoutés. Seul, il suit l'en
 ### Horizon de la nuit (mouvement)
 Le mouvement est écrit en GSAP (ScrollTrigger), et Lenis lisse le défilement à la molette au rythme de GSAP. Sans JS ou sous `prefers-reduced-motion`, rien ne bouge : défilement natif, lumière et ciel fixes, transitions de la console, des flèches et des boutons coupées.
 
-- **Lever.** La nappe de lumière cobalt (58 % de la hauteur de la nuit) se lève de 15 à 100 % de sa hauteur et de 0 à 100 % d'opacité, en 3,2 s `expo.out`.
+- **Lever.** La nappe de lumière cobalt se lève jusqu'à 40 % de la hauteur de la nuit, depuis 4 %, et de 0 à 100 % d'opacité, en 3,2 s `expo.out`.
 - **Poursuite.** Elle s'allume après 0,8 s (3 s) et traverse l'horizon de gauche à droite en 70 s, sans fin : deux sources radiales larges (42 % × 100 %, `rgb(70 105 255 / 0.5)`) sur une bande deux fois plus large que l'écran, qui glisse d'une source. La lumière se déplace, elle ne respire jamais : aucune variation d'intensité en boucle.
-- **Ciel.** 120 étoiles (positions tirées d'une graine, identiques à chaque visite), dessinées dans un canvas, apparaissent en 2,5 s puis tournent dans le sens antihoraire autour d'un pôle placé au milieu, à 35 % de la hauteur du ciel : un tour en un quart d'heure environ, comme une pose longue. Le ciel n'est dessiné que tant que la nuit est à l'écran.
-- **Défilement.** Sur la hauteur de la nuit, lissé d'une seconde : l'horizon monte jusqu'à 180 % de hauteur, saturation 1,3 et luminosité 1,25, la poursuite s'ouvre (×1,6 en largeur, ×1,3 en hauteur) et le ciel tourne d'un demi-radian de plus.
+- **Ciel.** 120 étoiles (positions tirées d'une graine, identiques à chaque visite), dessinées dans un canvas, apparaissent en 2,5 s puis tournent dans le sens antihoraire autour d'un pôle placé au milieu, à 35 % de la hauteur du ciel : un tour en neuf minutes environ, comme une pose longue. Le ciel n'est dessiné que tant que la nuit est à l'écran.
+- **Défilement.** Sur la hauteur de la nuit, lissé d'une seconde : la nappe monte de 40 à 60 % de la hauteur de la nuit, saturation 1,3 et luminosité 1,25, la poursuite s'ouvre (×1,6 en largeur, ×1,3 en hauteur) et le ciel tourne d'un demi-radian de plus.
 
 ## Do's and Don'ts
 
@@ -304,7 +304,7 @@ Le mouvement est écrit en GSAP (ScrollTrigger), et Lenis lisse le défilement �
 - **Do** générer police et fichiers de marque avec `scripts/brand.py`.
 
 ### Don't:
-- **Don't** ajouter d'ombre, de flou, de lueur de bord, de halo ou d'effet néon.
+- **Don't** ajouter d'ombre, de flou (hors du voile du fader), de lueur de bord, de halo ou d'effet néon.
 - **Don't** arrondir un angle ; seule l'icône d'application garde son rayon de 16 px.
 - **Don't** écrire un paragraphe ou un chiffre de conduite au pochoir.
 - **Don't** adopter l'allure d'un cabinet de conseil ou d'une page éditoriale blanche.
