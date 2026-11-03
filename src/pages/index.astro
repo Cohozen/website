@@ -371,23 +371,24 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         if (!calme && nuit) {
             gsap.set([".lumiere-horizon", ".nappe", ".poursuite"], { transformOrigin: "50% 100%" });
             gsap.timeline()
-                .fromTo(".nappe", { opacity: 0, scaleY: 0.15 }, { opacity: 1, scaleY: 1, duration: 3.2, ease: "expo.out" })
+                .fromTo(".nappe", { opacity: 0, scaleY: 0.1 }, { opacity: 1, scaleY: 1, duration: 3.2, ease: "expo.out" })
                 .fromTo(".poursuite", { opacity: 0 }, { opacity: 1, duration: 3, ease: "power1.inOut" }, 0.8)
                 .to(rotation, { eclat: 1, duration: 2.5, ease: "power1.inOut" }, 0.4)
                 .fromTo(".console", { autoAlpha: 0, x: 24 }, { autoAlpha: 1, x: 0, duration: 1.2, ease: "expo.out" }, 1);
             gsap.fromTo(".poursuite", { xPercent: -50 }, { xPercent: 0, duration: 70, ease: "none", repeat: -1 });
 
             const montee = { trigger: nuit, start: "top top", end: "bottom top", scrub: 1 };
-            gsap.to(".lumiere-horizon", {
-                scaleY: 1.8,
-                filter: "saturate(1.3) brightness(1.25)",
-                ease: "none",
-                scrollTrigger: montee,
-            });
+            // La nappe tient 40 % de la nuit en haut de page et monte à 60 %. Le filtre part de
+            // valeurs explicites : depuis « none », GSAP interpolerait depuis brightness(0).
+            gsap.fromTo(
+                ".lumiere-horizon",
+                { scaleY: 40 / 60, filter: "saturate(1) brightness(1)" },
+                { scaleY: 1, filter: "saturate(1.3) brightness(1.25)", ease: "none", scrollTrigger: montee },
+            );
             gsap.to(".poursuite", { scaleX: 1.6, scaleY: 1.3, ease: "none", scrollTrigger: montee });
             gsap.to(rotation, { defilement: 0.5, ease: "none", scrollTrigger: montee });
 
-            // Un tour en un quart d'heure environ ; on ne dessine que si la nuit est à l'écran.
+            // Un tour en neuf minutes environ ; on ne dessine que si la nuit est à l'écran.
             let visible = true;
             ScrollTrigger.create({
                 trigger: nuit,
@@ -399,7 +400,7 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             });
             gsap.ticker.add((_, dt) => {
                 if (!visible) return;
-                rotation.temps += (dt / 1000) * 0.006;
+                rotation.temps += (dt / 1000) * 0.012;
                 dessiner();
             });
         }
@@ -794,7 +795,7 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
     .lumiere-horizon {
         position: absolute;
         inset: auto 0 calc(100% - var(--horizon));
-        height: 58%;
+        height: 60%;
         z-index: -1;
         transform-origin: bottom;
     }
