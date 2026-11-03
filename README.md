@@ -1,6 +1,8 @@
 # corentinlegal.dev
 
-Site personnel de Corentin Le Gal. Astro statique, déployé sur Cloudflare Workers.
+Site personnel de Corentin Le Gal. Astro statique, déployé sur Cloudflare Workers. Les
+animations utilisent GSAP et Lenis (voir « Horizon de la nuit » et « Console de conduite » dans
+`DESIGN.md`).
 
 ```bash
 npm install

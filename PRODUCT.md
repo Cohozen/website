@@ -9,7 +9,8 @@ web
 ## Stack
 
 Astro statique, déployé sur Cloudflare Workers (fichiers statiques, Worker `personal-website`), Biome pour le lint et le format (même socle que
-le site Cernix et le site TryCast). Domaine : corentinlegal.dev. Pas d'analytics.
+le site Cernix et le site TryCast). Mouvement en GSAP (ScrollTrigger) et défilement lissé par
+Lenis, coupés sous `prefers-reduced-motion`. Domaine : corentinlegal.dev. Pas d'analytics.
 
 ## Users
 
