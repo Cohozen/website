@@ -955,10 +955,20 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         --avant: var(--nuit);
         --lumiere: var(--cobalt);
         --encre: var(--e-clair);
+        /* La nuit se retire en douceur (courbe smoothstep) et couvre aussi les sources : aucune
+           arête là où la lumière commence. */
         background:
+            linear-gradient(
+                to bottom,
+                var(--avant) 0,
+                rgb(5 5 5 / 0.84) calc(var(--fondu) * 0.25),
+                rgb(5 5 5 / 0.5) calc(var(--fondu) * 0.5),
+                rgb(5 5 5 / 0.16) calc(var(--fondu) * 0.75),
+                rgb(5 5 5 / 0) var(--fondu)
+            ),
             radial-gradient(75% 90% at 20% 38%, rgb(90 120 255 / 0.42), transparent 70%),
             radial-gradient(150% 110% at 100% 112%, rgb(122 69 216 / 0.78), transparent 62%),
-            linear-gradient(to bottom, var(--avant), var(--lumiere) var(--fondu));
+            var(--lumiere);
     }
 
     .grille {
