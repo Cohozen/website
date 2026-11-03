@@ -459,9 +459,9 @@
     {
       "name": "Captures de projet",
       "kind": "card",
-      "description": "Écrans de projet alignés par le bas, aux coins arrondis comme ceux du téléphone, sans filet.",
+      "description": "Écrans de projet alignés par le bas, aux coins à peine adoucis (4 px), sans filet.",
       "html": "<div class=\"ds-captures\"><div class=\"ds-ecran\"></div><div class=\"ds-ecran ds-ecran-2\"></div></div>",
-      "css": ".ds-captures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: end; padding: 24px; background: var(--aube, #ffc1d6); } .ds-ecran { aspect-ratio: 9 / 19.5; background: var(--e-sombre, #0b0d1a); border-radius: 20px; } .ds-ecran-2 { width: 88%; justify-self: start; }"
+      "css": ".ds-captures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: end; padding: 24px; background: var(--aube, #ffc1d6); } .ds-ecran { aspect-ratio: 9 / 19.5; background: var(--e-sombre, #0b0d1a); border-radius: 4px; } .ds-ecran-2 { width: 88%; justify-self: start; }"
     },
     {
       "name": "Monogramme sur l'horizon",

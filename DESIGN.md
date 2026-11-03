@@ -238,7 +238,7 @@ Le système est plat : aucune `box-shadow`, aucun flou, sauf le voile du fader (
 
 ## Shapes
 
-Angles droits partout (`rounded.none`) : boutons, pupitre, bouton du fader, bandes. Les seules exceptions sont l'icône d'application (`rounded.app-icon`, 16 px) et les captures d'écran (`clamp(14px, 1.8vw, 24px)`) : c'est la forme réelle du produit, pas un choix du site. Les contours sont des filets fins (1 px pour les repères, le plan de feux, la mention, le pied ; 1,5 px pour le bouton à filet). Le seul trait épais est l'horizon cobalt, à 2 px.
+Angles droits partout (`rounded.none`) : boutons, pupitre, bouton du fader, bandes. La seule exception est l'icône d'application (`rounded.app-icon`, 16 px) : c'est la forme réelle du produit, pas un choix du site. Les captures d'écran gardent un arrondi minuscule (4 px), juste assez pour adoucir le coin. Les contours sont des filets fins (1 px pour les repères, le plan de feux, la mention, le pied ; 1,5 px pour le bouton à filet). Le seul trait épais est l'horizon cobalt, à 2 px.
 
 Les flèches sont des SVG tracés à 1,6 px : oblique pour un lien sortant, verticale pour descendre dans la page.
 
@@ -256,7 +256,7 @@ La console n'existe qu'à partir de 1200 px avec une souris ; ailleurs, la page 
 
 **Pupitre.** En haut, en rail vertical : le seul numéro de conduite (« LX 1 » à « LX 5 », en cue numeral), sans nom de phase. Il prend l'aplat et l'encre de la phase dont la lumière occupe le haut de l'écran, avec un filet de 1 px à 30 % de son encre ; le changement de couleur dure 0,5 s. Le numéro a une longueur fixe (2,6 em), pour que le pupitre ne bouge pas. Quand la phase change, il roule dans sa fenêtre pendant que la couleur passe : l'ancien sort dans le sens du défilement (0,2 s), le nouveau entre derrière lui (0,5 s `expo.out`).
 
-**Fader.** Dessous, il remplace la barre de défilement native (`scrollbar-width: none`). La course va de la nuit (en haut) au plein jour (en bas). Une fente de 2 px à 35 % de l'encre, un trait tous les 5 % (10 px, 40 %) et un trait long tous les 25 % (16 px, 75 %). Les cinq phases sont des cues sur la course, « LX 1 » à « LX 5 » en cue numeral 13 px, à 12 px à gauche de la fente, posées là où leur lumière prend la main : celle de la phase courante à pleine encre, les autres à 55 % (par la couleur, pas l'opacité, pour garder leur flou). Sous chaque cue, un flou de 6 px teinté de la lumière à 35 %, aux bords fondus, la garde lisible quand elle passe sur un texte de la page.
+**Fader.** Dessous, il remplace la barre de défilement native (`scrollbar-width: none`). La course va de la nuit (en haut) au plein jour (en bas). Une fente de 2 px à 35 % de l'encre, un trait tous les 5 % (10 px, 40 %) et un trait long tous les 25 % (16 px, 75 %). Les cinq phases sont des cues sur la course, « LX 1 » à « LX 5 » en cue numeral 13 px, à 12 px à gauche de la fente, posées là où leur lumière prend la main : celle de la phase courante à pleine encre, les autres à 55 % (par la couleur, pas l'opacité, pour garder leur flou). Sous chaque cue, un flou de 6 px sans teinte, aux bords fondus, la garde lisible quand elle passe sur un texte de la page.
 
 **Bouton.** Un plot de 26 × 40 px à l'encre de la phase, strié de filets de sa lumière à 45 % pour la prise, barré en son milieu d'un filet de 2 px de sa lumière.
 
@@ -275,7 +275,7 @@ La stack en mots, jamais en logos : une liste de définitions sur 3 colonnes, fi
 Le parcours en quatre bandes pleine largeur, numérotées LX 3.1 à LX 3.4, chacune un cran de lumière plus claire que la précédente (rampe `rose` → `cue-4`). Dans chaque bande : numéro, années et rôle à gauche, la maison en cue title, la note à droite à l'encre `e2-rose`. Pas de ligne de temps, pas de points, pas de logos.
 
 ### Projet
-Texte sur 5 colonnes, captures sur 7. Le titre se tient à côté de l'icône de 72 px (rayon 16 px), puis l'accroche, le corps en `e2-aube`, la mention de sortie (étiquette pochoir entre deux filets d'encre de 1 px) tant que le statut est `bientot`, la stack en meta, et le bouton à filet vers le site. Les captures sont deux écrans alignés par le bas, le second à 88 %, aux coins arrondis comme ceux du téléphone, sans filet. Un projet = un fichier dans `src/content/projets/`.
+Texte sur 5 colonnes, captures sur 7. Le titre se tient à côté de l'icône de 72 px (rayon 16 px), puis l'accroche, le corps en `e2-aube`, la mention de sortie (étiquette pochoir entre deux filets d'encre de 1 px) tant que le statut est `bientot`, la stack en meta, et le bouton à filet vers le site. Les captures sont deux écrans alignés par le bas, le second à 88 %, aux coins à peine adoucis (4 px), sans filet. Un projet = un fichier dans `src/content/projets/`.
 
 ### Monogramme
 CLG au pochoir 800, vectorisé, sans trait ni coupe ajoutés. Seul, il suit l'encre (`currentColor`) : marque d'en-tête et de pied de page, symbole une encre. Dans l'avatar et le favicon, il se tient debout sur l'horizon : ciel nuit puis cobalt au-dessus de sa ligne de base, nuit en dessous. Dans la version longue, le nom suit sur la même ligne de base. Tout fichier de marque est généré par `scripts/brand.py`, jamais retouché à la main.
