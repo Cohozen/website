@@ -74,7 +74,6 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
     <div class="console">
         <p class="conduite" aria-hidden="true">
             <span class="conduite-q">LX 1</span>
-            <span class="conduite-nom">Nuit</span>
         </p>
         <!-- Le fader de la console remplace la barre de défilement : la course va de la nuit
              (en haut) au plein jour (en bas), chaque phase est une cue sur la course. -->
@@ -89,13 +88,14 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             aria-label="Position dans la page"
         >
             {graduations.map((p) => <span class="fader-trait" style={`--p: ${p}`} />)}
+            <span class="fader-voile" aria-hidden="true"></span>
             <ol class="fader-cues" aria-hidden="true"></ol>
             <span class="fader-visee" aria-hidden="true"></span>
             <span class="fader-bouton" aria-hidden="true"></span>
         </div>
     </div>
 
-    <header class="nuit" data-phase="nuit" data-nom="Nuit">
+    <header class="nuit" data-phase="nuit">
         <a class="marque" href="/" aria-label="Corentin Le Gal, accueil" set:html={monogramme} />
         <canvas class="ciel" aria-hidden="true"></canvas>
         <div class="lumiere-horizon" aria-hidden="true">
@@ -146,7 +146,7 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
     </header>
 
     <main id="contenu">
-        <section class="phase cobalt" data-phase="cobalt" data-nom="Montée cobalt" aria-labelledby="t-metier">
+        <section class="phase cobalt" data-phase="cobalt" aria-labelledby="t-metier">
             <div class="wrap grille">
                 <h2 id="t-metier">Je construis des logiciels de bout en bout</h2>
                 <div class="metier-texte">
@@ -174,7 +174,7 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             </div>
         </section>
 
-        <section class="phase rose" data-phase="rose" data-nom="Rose" aria-labelledby="t-parcours">
+        <section class="phase rose" data-phase="rose" aria-labelledby="t-parcours">
             <div class="wrap">
                 <h2 id="t-parcours">Onze ans, quatre équipes</h2>
             </div>
@@ -203,7 +203,7 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             </ol>
         </section>
 
-        <section id="projets" class="phase aube" data-phase="aube" data-nom="Aube" aria-labelledby="t-projets">
+        <section id="projets" class="phase aube" data-phase="aube" aria-labelledby="t-projets">
             <div class="wrap">
                 <h2 id="t-projets" class="visuellement-cache">Projets</h2>
                 {
@@ -255,7 +255,7 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             </div>
         </section>
 
-        <section class="phase jour" data-phase="jour" data-nom="Plein jour" aria-labelledby="t-cernix">
+        <section class="phase jour" data-phase="jour" aria-labelledby="t-cernix">
             <div class="wrap jour-grille">
                 <h2 id="t-cernix">Une mission&#8239;? C'est chez Cernix</h2>
                 <div class="jour-texte">
@@ -409,7 +409,6 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         // le fader suit le défilement et le pilote.
         const phases = [...document.querySelectorAll<HTMLElement>("[data-phase]")].filter((el) => el !== racine);
         const q = document.querySelector(".conduite-q");
-        const nom = document.querySelector(".conduite-nom");
         const fader = document.querySelector<HTMLElement>(".fader");
         const bouton = document.querySelector<HTMLElement>(".fader-bouton");
 
@@ -433,11 +432,22 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             fader?.setAttribute("aria-valuenow", String(Math.round(p * 100)));
             const i = Math.max(0, prises.findLastIndex((prise) => scrollY >= prise));
             if (i === courante) return;
+            const sens = i > courante ? 1 : -1;
+            const premiere = courante === -1;
             courante = i;
             racine.dataset.phase = phases[i].dataset.phase;
-            if (q) q.textContent = `LX ${i + 1}`;
-            if (nom) nom.textContent = phases[i].dataset.nom ?? "";
             cues.forEach((li, j) => li.classList.toggle("active", j === i));
+            if (!q) return;
+            if (premiere || calme) {
+                q.textContent = `LX ${i + 1}`;
+                return;
+            }
+            // Le numéro roule dans le pupitre pendant que la couleur change : l'ancien sort dans
+            // le sens du défilement, le nouveau entre derrière lui.
+            gsap.timeline({ overwrite: true })
+                .to(q, { yPercent: -110 * sens, duration: 0.2, ease: "power2.in" })
+                .set(q, { textContent: `LX ${i + 1}`, yPercent: 110 * sens })
+                .to(q, { yPercent: 0, duration: 0.5, ease: "expo.out" });
         };
 
         // Où chaque phase prend la main : quand les trois cinquièmes de son fondu de lumière ont
@@ -451,7 +461,6 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
                 return Math.max(0, Math.min(prise, course - 2));
             });
             cues.forEach((li, i) => li.style.setProperty("--p", String(prises[i] / course)));
-            courante = -1;
             maj();
         };
 
@@ -473,7 +482,10 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             if (!surBouton) defiler(niveau(e.clientY), { duration: 0.9 });
         });
         fader?.addEventListener("pointermove", (e) => {
-            fader.style.setProperty("--y", `${e.clientY - fader.getBoundingClientRect().top}px`);
+            const r = fader.getBoundingClientRect();
+            const demi = bouton ? bouton.offsetHeight / 2 : 0;
+            const y = Math.min(r.height - demi, Math.max(demi, e.clientY - r.top));
+            fader.style.setProperty("--y", `${y}px`);
             if (fader.hasPointerCapture(e.pointerId)) defiler(niveau(e.clientY), { lerp: 0.25 });
         });
         const lacher = () => fader?.classList.remove("tenu");
@@ -534,8 +546,8 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             z-index: 10;
             top: 20px;
             bottom: 20px;
-            right: clamp(4px, calc(var(--page) - 60px), 24px);
-            width: 56px;
+            right: clamp(0px, calc(var(--page) - 64px), 24px);
+            width: 64px;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
@@ -567,15 +579,11 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             --c-fond: var(--jour);
         }
 
-        /* Le pupitre, au-dessus de la course. Sa hauteur est fixe (celle de « LX 2 Montée
-           cobalt ») : le fader ne bouge pas quand le nom de la phase change. */
+        /* Le pupitre, au-dessus de la course : le numéro de la phase, qui roule dans sa fenêtre. */
         .conduite {
             flex: none;
             margin: 0 calc(var(--axe) - 15px) 0 0;
-            display: flex;
-            gap: 12px;
-            align-items: baseline;
-            inline-size: 12.6em;
+            overflow: hidden;
             padding: 12px 7px;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
@@ -595,11 +603,12 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         }
 
         .conduite-q {
-            opacity: 0.75;
+            display: block;
         }
 
         .fader {
             position: relative;
+            isolation: isolate;
             flex: 1;
             width: 100%;
             cursor: crosshair;
@@ -648,20 +657,24 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
             margin: 0;
             padding: 0;
             list-style: none;
+            pointer-events: none;
             font-size: 0.75rem;
             line-height: 1;
             white-space: nowrap;
         }
 
-        /* Chaque cue est un lien vers sa phase : une main au survol, une zone de clic large. */
+        /* Chaque cue est un lien vers sa phase : une main au survol, une zone de clic large.
+           Au survol, le texte avance par la marge intérieure : la zone de clic, ancrée à droite,
+           ne fait que s'agrandir et le survol ne clignote pas. */
         .fader-cues :global(li) {
-            right: calc(var(--axe) + 9px);
-            padding: 8px 4px;
+            right: calc(var(--axe) + 12px);
+            padding: 8px 6px;
             opacity: 0.5;
             cursor: pointer;
+            pointer-events: auto;
             transition:
                 opacity 0.3s,
-                translate 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .fader-cues :global(li.active),
@@ -670,7 +683,21 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         }
 
         .fader-cues :global(li:hover) {
-            translate: -3px -50%;
+            padding-right: 10px;
+        }
+
+        /* Au survol de la course, un voile flouté se pose derrière le fader pour le détacher
+           de la page. */
+        .fader-voile {
+            position: absolute;
+            z-index: -1;
+            inset: -20px -48px -20px -20px;
+            background: color-mix(in srgb, var(--c-fond) 45%, transparent);
+            backdrop-filter: blur(10px);
+            mask-image: linear-gradient(to left, #000 55%, transparent);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s;
         }
 
         /* La visée : au survol, le niveau où un clic amènerait la page. */
@@ -732,6 +759,15 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
 
         .fader:hover .fader-visee {
             opacity: 0.5;
+        }
+
+        .fader:hover .fader-voile {
+            opacity: 1;
+        }
+
+        /* Sur une cue, le clic mène à sa phase : pas de visée. */
+        .fader .fader-cues:hover ~ .fader-visee {
+            opacity: 0;
         }
 
         .fader-bouton:hover {
@@ -1343,6 +1379,7 @@ const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><p
         .fader-trait,
         .fader-cues :global(li),
         .fader-visee,
+        .fader-voile,
         .fader-bouton,
         :global(.fleche),
         .action {
