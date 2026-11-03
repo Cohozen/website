@@ -457,11 +457,11 @@
       "css": ".ds-aube-m { background: var(--aube, #ffc1d6); padding: 24px; } .ds-mention { margin: 0; padding-block: 12px; font-family: 'CLG Stencil', 'Arial Narrow', sans-serif; font-weight: 700; font-size: 1.0625rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--e-sombre, #0b0d1a); border-block: 1px solid var(--e-sombre, #0b0d1a); }"
     },
     {
-      "name": "Horizon des captures",
+      "name": "Captures de projet",
       "kind": "card",
-      "description": "Écrans de projet alignés par le bas, debout sur un filet cobalt de 2 px ; angles droits.",
+      "description": "Écrans de projet alignés par le bas, aux coins arrondis comme ceux du téléphone, sans filet.",
       "html": "<div class=\"ds-captures\"><div class=\"ds-ecran\"></div><div class=\"ds-ecran ds-ecran-2\"></div></div>",
-      "css": ".ds-captures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: end; padding: 24px 24px 2px; border-bottom: 2px solid var(--cobalt, #0a33ff); background: var(--aube, #ffc1d6); } .ds-ecran { aspect-ratio: 9 / 19.5; background: var(--e-sombre, #0b0d1a); } .ds-ecran-2 { width: 88%; justify-self: start; }"
+      "css": ".ds-captures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: end; padding: 24px; background: var(--aube, #ffc1d6); } .ds-ecran { aspect-ratio: 9 / 19.5; background: var(--e-sombre, #0b0d1a); border-radius: 20px; } .ds-ecran-2 { width: 88%; justify-self: start; }"
     },
     {
       "name": "Monogramme sur l'horizon",

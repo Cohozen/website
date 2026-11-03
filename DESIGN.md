@@ -163,7 +163,7 @@ Refus confirmés : le ton consultant et le blanc éditorial (c'est le monde de C
 Une suite de lumières de scène, de la plus sombre à la plus claire, chacune doublée de ses encres. Toutes les valeurs sont des propriétés personnalisées sur `:root` dans `src/styles/global.css` (sauf `horizon-nuit`, `violet-transition` et la rampe des cues, écrites en littéral dans la page) ; `scripts/brand.py` reprend les mêmes valeurs pour le logo.
 
 ### Primary
-- **Cobalt d'horizon** (`cobalt`) : la ligne d'horizon. Filet de 2 px au sol de la nuit, filet sous les captures de projet, ciel de l'avatar sous le monogramme, aplat de la phase « Montée cobalt », fond du pupitre dans cette phase, survol du bouton plein, sélection de texte, barre de défilement native (là où le fader ne la remplace pas).
+- **Cobalt d'horizon** (`cobalt`) : la ligne d'horizon. Filet de 2 px au sol de la nuit, ciel de l'avatar sous le monogramme, aplat de la phase « Montée cobalt », fond du pupitre dans cette phase, survol du bouton plein, sélection de texte, barre de défilement native (là où le fader ne la remplace pas).
 - **Cobalt de nuit** (`horizon-nuit`) : le même cobalt éclairci pour rester lisible sur le noir. Étiquettes des repères de la nuit.
 
 ### Secondary
@@ -190,7 +190,7 @@ Une suite de lumières de scène, de la plus sombre à la plus claire, chacune d
 
 **The Wide Field Rule.** La lumière se pose en larges champs : un aplat, un fondu vertical, une source radiale décentrée de 55 à 150 % de large. Jamais une lueur de bord, un halo autour d'un objet ou un néon.
 
-**The Cobalt Horizon Rule.** Le cobalt trace l'horizon. Partout où un objet doit se tenir debout (le nom dans la nuit, les écrans de projet), il se tient sur un filet cobalt ; dans l'avatar du monogramme, l'horizon est la lumière cobalt elle-même, sans trait. Jamais de trait qui traverse des lettres : il se lit comme une rature.
+**The Cobalt Horizon Rule.** Le cobalt trace l'horizon. Le nom de la nuit se tient debout sur un filet cobalt ; dans l'avatar du monogramme, l'horizon est la lumière cobalt elle-même, sans trait. Jamais de trait qui traverse des lettres : il se lit comme une rature.
 
 ## Typography
 
@@ -238,7 +238,7 @@ Le système est plat : aucune `box-shadow`, aucun flou, sauf le voile du fader (
 
 ## Shapes
 
-Angles droits partout (`rounded.none`) : boutons, pupitre, bouton du fader, bandes, captures. La seule exception est l'icône d'application (`rounded.app-icon`, 16 px) : c'est la forme réelle du produit, pas un choix du site. Les contours sont des filets fins (1 px pour les repères, le plan de feux, la mention, le pied ; 1,5 px pour le bouton à filet). Le seul trait épais est l'horizon cobalt, à 2 px.
+Angles droits partout (`rounded.none`) : boutons, pupitre, bouton du fader, bandes. Les seules exceptions sont l'icône d'application (`rounded.app-icon`, 16 px) et les captures d'écran (`clamp(14px, 1.8vw, 24px)`) : c'est la forme réelle du produit, pas un choix du site. Les contours sont des filets fins (1 px pour les repères, le plan de feux, la mention, le pied ; 1,5 px pour le bouton à filet). Le seul trait épais est l'horizon cobalt, à 2 px.
 
 Les flèches sont des SVG tracés à 1,6 px : oblique pour un lien sortant, verticale pour descendre dans la page.
 
@@ -254,14 +254,14 @@ Des actions de régie, nettes et sans couleur propre.
 ### Console de conduite (signature)
 La console n'existe qu'à partir de 1200 px avec une souris ; ailleurs, la page garde sa barre de défilement native et aucun indicateur de phase. Elle occupe la marge droite (64 px, de 20 px du haut à 20 px du bas) et entre en glissant de 24 px vers la gauche au chargement (1,2 s, après 1 s). Elle est masquée aux lecteurs d'écran, sauf le fader (`role="scrollbar"`, `aria-valuenow` de 0 à 100).
 
-**Pupitre.** En haut, en rail vertical : le seul numéro de conduite (« LX 1 » à « LX 5 », en cue numeral), sans nom de phase. Il prend l'aplat et l'encre de la phase dont la lumière occupe le haut de l'écran, avec un filet de 1 px à 30 % de son encre ; le changement de couleur dure 0,5 s. Quand la phase change, le numéro roule dans sa fenêtre pendant que la couleur passe : l'ancien sort dans le sens du défilement (0,2 s), le nouveau entre derrière lui (0,5 s `expo.out`).
+**Pupitre.** En haut, en rail vertical : le seul numéro de conduite (« LX 1 » à « LX 5 », en cue numeral), sans nom de phase. Il prend l'aplat et l'encre de la phase dont la lumière occupe le haut de l'écran, avec un filet de 1 px à 30 % de son encre ; le changement de couleur dure 0,5 s. Le numéro a une longueur fixe (2,6 em), pour que le pupitre ne bouge pas. Quand la phase change, il roule dans sa fenêtre pendant que la couleur passe : l'ancien sort dans le sens du défilement (0,2 s), le nouveau entre derrière lui (0,5 s `expo.out`).
 
-**Fader.** Dessous, il remplace la barre de défilement native (`scrollbar-width: none`). La course va de la nuit (en haut) au plein jour (en bas). Une fente de 2 px à 35 % de l'encre, un trait tous les 5 % (10 px, 40 %) et un trait long tous les 25 % (16 px, 75 %). Les cinq phases sont des cues sur la course, « LX 1 » à « LX 5 » en cue numeral 12 px, à 12 px à gauche de la fente, posées là où leur lumière prend la main : celle de la phase courante à pleine encre, les autres à 50 %.
+**Fader.** Dessous, il remplace la barre de défilement native (`scrollbar-width: none`). La course va de la nuit (en haut) au plein jour (en bas). Une fente de 2 px à 35 % de l'encre, un trait tous les 5 % (10 px, 40 %) et un trait long tous les 25 % (16 px, 75 %). Les cinq phases sont des cues sur la course, « LX 1 » à « LX 5 » en cue numeral 13 px, à 12 px à gauche de la fente, posées là où leur lumière prend la main : celle de la phase courante à pleine encre, les autres à 55 % (par la couleur, pas l'opacité, pour garder leur flou). Sous chaque cue, un flou de 6 px teinté de la lumière à 35 %, aux bords fondus, la garde lisible quand elle passe sur un texte de la page.
 
 **Bouton.** Un plot de 26 × 40 px à l'encre de la phase, strié de filets de sa lumière à 45 % pour la prise, barré en son milieu d'un filet de 2 px de sa lumière.
 
 **Interactions.**
-- Course : pointeur en croix. Au survol, un voile se pose derrière le fader (aplat de la phase à 45 %, flou de 10 px, fondu vers la gauche) pour le détacher de la page, la fente et les traits s'éclairent, et une visée (filet de 1 px à 50 %, bornée à la course du bouton) montre le niveau où un clic amènerait la page. Un clic y conduit la page en 0,9 s.
+- Course : pointeur en croix. Au survol, un voile se pose derrière le fader (flou de 10 px sans teinte, fondu vers la gauche) pour le détacher de la page, la fente et les traits s'éclairent, et une visée (filet de 1 px à 50 %, 20 px de large sur la fente seule, bornée à la course du bouton) montre le niveau où un clic amènerait la page. Un clic y conduit la page en 0,9 s.
 - Cues : une main au survol, la cue avance de 4 px (par sa marge intérieure : sa zone de clic ne bouge pas) et passe à pleine encre ; la visée s'efface. Un clic amène la page au début de sa phase en 1,6 s.
 - Bouton : une main ouverte, il grossit de 8 % au survol ; saisi, la main se ferme, il s'élargit (×1,18 × 1,06), la visée s'efface et la page suit le glisser.
 
@@ -275,7 +275,7 @@ La stack en mots, jamais en logos : une liste de définitions sur 3 colonnes, fi
 Le parcours en quatre bandes pleine largeur, numérotées LX 3.1 à LX 3.4, chacune un cran de lumière plus claire que la précédente (rampe `rose` → `cue-4`). Dans chaque bande : numéro, années et rôle à gauche, la maison en cue title, la note à droite à l'encre `e2-rose`. Pas de ligne de temps, pas de points, pas de logos.
 
 ### Projet
-Texte sur 5 colonnes, captures sur 7. Le titre se tient à côté de l'icône de 72 px (rayon 16 px), puis l'accroche, le corps en `e2-aube`, la mention de sortie (étiquette pochoir entre deux filets d'encre de 1 px) tant que le statut est `bientot`, la stack en meta, et le bouton à filet vers le site. Les captures sont deux écrans alignés par le bas, le second à 88 %, debout sur un filet cobalt de 2 px : des silhouettes sur l'horizon. Un projet = un fichier dans `src/content/projets/`.
+Texte sur 5 colonnes, captures sur 7. Le titre se tient à côté de l'icône de 72 px (rayon 16 px), puis l'accroche, le corps en `e2-aube`, la mention de sortie (étiquette pochoir entre deux filets d'encre de 1 px) tant que le statut est `bientot`, la stack en meta, et le bouton à filet vers le site. Les captures sont deux écrans alignés par le bas, le second à 88 %, aux coins arrondis comme ceux du téléphone, sans filet. Un projet = un fichier dans `src/content/projets/`.
 
 ### Monogramme
 CLG au pochoir 800, vectorisé, sans trait ni coupe ajoutés. Seul, il suit l'encre (`currentColor`) : marque d'en-tête et de pied de page, symbole une encre. Dans l'avatar et le favicon, il se tient debout sur l'horizon : ciel nuit puis cobalt au-dessus de sa ligne de base, nuit en dessous. Dans la version longue, le nom suit sur la même ligne de base. Tout fichier de marque est généré par `scripts/brand.py`, jamais retouché à la main.
@@ -294,7 +294,7 @@ Le mouvement est écrit en GSAP (ScrollTrigger), et Lenis lisse le défilement �
 - **Do** placer chaque nouvelle section dans la montée nuit, cobalt, rose, aube, jour, avec son aplat (`--lumiere`), son encre (`--encre`) et la lumière précédente en départ de fondu (`--avant`).
 - **Do** faire remonter chaque phase d'un pixel sur la précédente.
 - **Do** éclairer une phase par une ou deux sources radiales larges et décentrées, en plus de son aplat.
-- **Do** poser ce qui doit se tenir debout sur un filet cobalt de 2 px.
+- **Do** poser le nom de la nuit debout sur son filet cobalt de 2 px.
 - **Do** écrire noms, titres et étiquettes au pochoir en capitales, et tout le reste en Albert Sans.
 - **Do** composer les numéros de conduite en Albert Sans 600 tabulaire.
 - **Do** poser le monogramme debout sur l'horizon de lumière dans l'avatar, et le laisser seul ailleurs.
