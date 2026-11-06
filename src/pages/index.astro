@@ -61,14 +61,74 @@ const parcours = [
 // Échelle du fader : un trait tous les 5 %, un trait long tous les 25 %.
 const graduations = Array.from({ length: 21 }, (_, i) => i / 20);
 
+// Données structurées : relient ce site, GitHub, LinkedIn, Cernix et les projets à une même
+// personne, pour que moteurs et IA ne la confondent pas avec un homonyme.
+const site = Astro.site?.href ?? "https://corentinlegal.dev/";
+const personne = `${site}#corentin-le-gal`;
+const donnees = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "ProfilePage",
+            "@id": `${site}#page`,
+            url: site,
+            inLanguage: "fr-FR",
+            mainEntity: { "@id": personne },
+        },
+        {
+            "@type": "WebSite",
+            "@id": `${site}#site`,
+            url: site,
+            name: "Corentin Le Gal",
+            inLanguage: "fr-FR",
+            author: { "@id": personne },
+        },
+        {
+            "@type": "Person",
+            "@id": personne,
+            name: "Corentin Le Gal",
+            url: site,
+            jobTitle: "Lead développeur fullstack",
+            description:
+                "Développeur depuis 2015 à Angers : TypeScript, Node.js, React et .NET, du back-end au mobile. Fondateur du cabinet Cernix.",
+            email: "mailto:corentin.legal@proton.me",
+            address: {
+                "@type": "PostalAddress",
+                addressLocality: "Angers",
+                addressRegion: "Pays de la Loire",
+                addressCountry: "FR",
+            },
+            knowsAbout: stack.flatMap((s) => s.quoi.split(", ")),
+            worksFor: {
+                "@type": "Organization",
+                "@id": "https://cernix.fr/#organisation",
+                name: "Cernix",
+                url: "https://cernix.fr/",
+            },
+            sameAs: [
+                ...liens.filter((l) => l.href.startsWith("http")).map((l) => l.href),
+                "https://cernix.fr/#qui",
+            ],
+        },
+        ...projets.map((p) => ({
+            "@type": "SoftwareApplication",
+            name: p.data.titre,
+            description: p.data.accroche,
+            url: p.data.site,
+            author: { "@id": personne },
+        })),
+    ],
+};
+
 const fleche = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M5.5 3H13v7.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
 const descendre = `<svg class="fleche" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M3 9l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
 ---
 
 <Layout
-    title="Corentin Le Gal, développeur"
-    description="Développeur depuis 2015 : TypeScript, Node.js et .NET, du back-end au mobile. Parcours, stack et projets, dont TryCast."
+    title="Corentin Le Gal, lead développeur TypeScript et .NET à Angers"
+    description="Développeur depuis 2015 et fondateur de Cernix à Angers : TypeScript, Node.js, React et .NET, du back-end au mobile. Parcours, stack et projets, dont TryCast."
 >
+    <script slot="head" type="application/ld+json" set:html={JSON.stringify(donnees)} />
     <a class="evitement" href="#contenu">Aller au contenu</a>
 
     <div class="console">
