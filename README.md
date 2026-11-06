@@ -33,6 +33,13 @@ npm run deploy         # astro build, puis wrangler deploy
 `npx wrangler deploy --dry-run` vérifie ce qui serait envoyé sans rien publier. Le build se
 fait sur ta machine : c'est ta version locale de Node qui compte.
 
+### Domaines
+
+`corentinlegal.dev` est un domaine personnalisé du Worker. `www.corentinlegal.dev` est un
+enregistrement `AAAA 100::` proxifié : une Redirect Rule de la zone le renvoie en 301 vers
+`https://corentinlegal.dev`, chemin et paramètres conservés. « Always Use HTTPS » est actif sur la
+zone.
+
 ## Ajouter un projet au portfolio
 
 Un fichier Markdown par projet dans `src/content/projets/` (schéma dans `src/content.config.ts`).
