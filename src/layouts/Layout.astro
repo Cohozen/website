@@ -21,14 +21,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         <link rel="canonical" href={canonical} />
         <meta name="theme-color" content="#050505" />
         <link rel="preload" href="/fonts/clg-stencil-800.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="icon" href="/favicon.ico" sizes="96x96" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="fr_FR" />
+        <meta property="og:site_name" content="Corentin Le Gal" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonical} />
         <meta property="og:image" content={new URL("/og.png", Astro.site)} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <slot name="head" />
     </head>
     <body>
         <slot />
