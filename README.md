@@ -39,6 +39,24 @@ Un fichier Markdown par projet dans `src/content/projets/` (schéma dans `src/co
 `statut: bientot` affiche la `mention` ; `statut: disponible` affiche les liens `appStore` et
 `playStore`. Les images vont dans `src/assets/`.
 
+## Référencement
+
+Un homonyme, webdesigner à Angers (corentin-legal.fr), sort sur les mêmes recherches. Le site
+s'en distingue par ce qu'il est seul à dire : lead développeur, TypeScript et .NET, fondateur
+de Cernix, GitHub `Cohozen`, TryCast.
+
+- Titre et description : props de `<Layout>` dans `src/pages/index.astro`.
+- Données structurées : le JSON-LD `donnees` de `src/pages/index.astro` (`ProfilePage`,
+  `WebSite`, `Person`, un `SoftwareApplication` par projet). Il est construit à partir de
+  `liens`, `stack` et de la collection `projets` : il suit le contenu sans édition à part.
+  Le `sameAs` relie la personne à GitHub, LinkedIn et `https://cernix.fr/#qui`.
+- `public/robots.txt` : sitemap et `Content-Signal: search=yes, ai-input=yes` (réponses des
+  moteurs IA permises ; l'entraînement n'est ni permis ni refusé).
+- Favicon : `favicon.svg` pour les navigateurs, `favicon.ico` 96 × 96 pour Google et les
+  robots (voir `brand/README.md`).
+- Le domaine est vérifié dans Google Search Console, où le sitemap est soumis. Après un
+  changement de titre ou de description, y demander l'indexation de la page d'accueil.
+
 ## Logo et police d'affichage
 
 Générés par `scripts/brand.py` puis `scripts/brand-png.mjs` : voir `brand/README.md`.
