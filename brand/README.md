@@ -21,7 +21,8 @@ node scripts/brand-png.mjs
 | `corentin-le-gal-logo-blanc.svg` | Monogramme + nom, sur fond sombre |
 | `og.svg` → `public/og.png` | Image de partage 1200 × 630 |
 
-Le script écrit aussi `public/favicon.svg`, `public/apple-touch-icon.png` et
+Les scripts écrivent aussi `public/favicon.svg`, `public/favicon.ico` (96 × 96, pour Google et les
+robots qui ignorent le SVG), `public/apple-touch-icon.png` et
 `src/assets/monogramme.svg` (version `currentColor` utilisée dans la page).
 
 Couleurs : nuit `#050505`, cobalt `#0a33ff`, rose `#ff6aae`, jour `#f7f5ff`, encre `#0b0d1a`.
